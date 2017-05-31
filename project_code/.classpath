@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="src" path="src/main/resources"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-cluster"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-common"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-config-api"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-config-spring"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-container-api"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-container-javaconfig"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-container-jetty"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-container-log4j"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-container-logback"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-container-spring"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-filter-cache"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-filter-validation"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-monitor-api"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-monitor-default"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-monitor-simple"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-registry-api"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-registry-default"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-registry-multicast"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-registry-redis"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-registry-simple"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-registry-zookeeper"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-remoting-api"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-remoting-grizzly"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-remoting-http"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-remoting-mina"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-remoting-netty"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-remoting-p2p"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-remoting-zookeeper"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-rpc-api"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-rpc-default"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-rpc-hessian"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-rpc-http"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-rpc-injvm"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-rpc-memcached"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-rpc-redis"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-rpc-rest"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-rpc-rmi"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-rpc-thrift"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dubbo-rpc-webservice"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/hessian-lite"/>
+	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/com.genuitec.embedded.tomcat.runtime.v70">
+		<attributes>
+			<attribute name="owner.project.facets" value="jst.web"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6">
+		<attributes>
+			<attribute name="owner.project.facets" value="java"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="build/classes"/>
+</classpath>

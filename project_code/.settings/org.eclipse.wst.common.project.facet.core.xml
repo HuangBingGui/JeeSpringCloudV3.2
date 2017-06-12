@@ -6,4 +6,5 @@
   <installed facet="jst.java" version="6.0"/>
   <installed facet="jst.web" version="2.5"/>
   <installed facet="wst.jsdt.web" version="1.0"/>
+  <installed facet="me.spring" version="4.1"/>
 </faceted-project>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<name>viewForm</name>
+	<filePath>src/main/webapp/webpage/${lastPackageName}/${moduleName}/${subModuleName}</filePath>
+	<fileName>${className}Form.jsp</fileName>
+	<content><![CDATA[
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ include file="/webpage/include/taglib.jsp"%>
+<html>
+<head>
+	<title>${functionNameSimple}管理</title>
+	<meta name="decorator" content="default"/>
+	<script type="text/javascript">
+		var validateForm;
+		function doSubmit(){//回调函数，在编辑和保存动作时，供openDialog调用提交表单。
+		  if(validateForm.form()){
+			  $("#inputForm").submit();
+			  return true;
+		  }
+	
+		  return false;
+		}
+		$(document).ready(function() {
+			$("#name").focus();
+			validateForm = $("#inputForm").validate({
+				submitHandler: function(form){
+					loading('正在提交，请稍等...');
+					form.submit();
+				},
+				errorContainer: "#messageBox",
+				errorPlacement: function(error, element) {
+					$("#messageBox").text("输入有误，请先更正。");
+					if (element.is(":checkbox") || element.is(":radio") || element.parent().is(".input-append")){
+						error.appendTo(element.parent().parent());
+					} else {
+						error.insertAfter(element);
+					}
+				}
+			});
+			<#list table.columnList as c>
+				<#if c.isEdit?? && c.isEdit == "1" && (c.isNotBaseField || c.simpleJavaField == 'remarks')>
+				<#if c.showType == "dateselect">
+					laydate({
+			            elem: '#${c.javaFieldId}', //目标元素。由于laydate.js封装了一个轻量级的选择器引擎，因此elem还允许你传入class、tag但必须按照这种方式 '#id .class'
+			            event: 'focus' //响应事件。如果没有传入event，则按照默认的click
+			        });
+				</#if>
+				</#if>
+			</#list>
+		});
+	</script>
+</head>
+<body>
+	<form:form id="inputForm" modelAttribute="${className}" action="${r"${ctx}"}/${urlPrefix}/save" method="post" class="form-horizontal">
+		<form:hidden path="id"/>
+		<sys:message content="${r"${message}"}"/>
+		<table class="table table-bordered  table-condensed dataTables-example dataTable no-footer">
+		   <tbody>
+		<#list table.columnList as c>
+			<#if c.simpleJavaField == 'parent'>
+			<tr>
+				<td class="width-15 active"><label class="pull-right">上级${c.comments}:</label></td>
+				<td class="width-35">
+					<sys:treeselect id="${c.simpleJavaField}" name="${c.javaFieldId}" value="${"$"}{${className}.${c.javaFieldId}}" labelName="${c.javaFieldName}" labelValue="${"$"}{${className}.${c.javaFieldName}}"
+						title="${c.comments}" url="/${urlPrefix}/treeData" extId="${'$'}{${className}.id}" cssClass="form-control " allowClear="true"/>
+				</td>
+			</tr>
+			<#elseif c.isEdit?? && c.isEdit == "1" && (c.isNotBaseField || c.simpleJavaField == 'remarks') && c.javaFieldId != 'parentIds'>
+			<tr>
+				<td class="width-15 active"><label class="pull-right"><#if c.isNull != "1"><font color="red">*</font></#if>${c.comments}：</label></td>
+				<td class="width-35">
+				<#if c.showType == "input">
+					<form:input path="${c.javaFieldId}" htmlEscape="false"<#if c.dataLength != "0"> maxlength="${c.dataLength}"</#if> class="form-control  <#if c.isNull != "1">required</#if><#if c.javaType == "Long" || c.javaType == "Integer"> digits</#if><#if c.javaType == "Double"> number</#if>"/>
+				<#elseif c.showType == "textarea">
+					<form:textarea path="${c.javaFieldId}" htmlEscape="false" rows="4"<#if c.dataLength != "0"> maxlength="${c.dataLength}"</#if> class="form-control <#if c.isNull != "1">required</#if>"/>
+				<#elseif c.showType == "select">
+					<form:select path="${c.javaFieldId}" class="form-control  <#if c.isNull != "1">required</#if>">
+						<form:option value="" label=""/>
+						<form:options items="${"$"}{fns:getDictList('${c.dictType}')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+					</form:select>
+				<#elseif c.showType == "checkbox">
+					<form:checkboxes path="${c.javaFieldId}" items="${"$"}{fns:getDictList('${c.dictType}')}" itemLabel="label" itemValue="value" htmlEscape="false" class="form-control <#if c.isNull != "1">required</#if>"/>
+				<#elseif c.showType == "radiobox">
+					<form:radiobuttons path="${c.javaFieldId}" items="${"$"}{fns:getDictList('${c.dictType}')}" itemLabel="label" itemValue="value" htmlEscape="false" class="form-control <#if c.isNull != "1">required</#if>"/>
+				<#elseif c.showType == "dateselect">
+					<input name="${c.javaFieldId}" type="text" readonly="readonly" maxlength="20" class="laydate-icon form-control layer-date <#if c.isNull != "1">required</#if>"
+						value="<fmt:formatDate value="${"$"}{${className}.${c.javaFieldId}}" pattern="yyyy-MM-dd HH:mm:ss"/>"/>
+				<#elseif c.showType == "userselect">
+					<sys:treeselect id="${c.simpleJavaField}" name="${c.javaFieldId}" value="${"$"}{${className}.${c.javaFieldId}}" labelName="${c.javaFieldName}" labelValue="${"$"}{${className}.${c.javaFieldName}}"
+						title="用户" url="/sys/office/treeData?type=3" cssClass="form-control <#if c.isNull != "1">required</#if>" allowClear="true" notAllowSelectParent="true"/>
+				<#elseif c.showType == "officeselect">
+					<sys:treeselect id="${c.simpleJavaField}" name="${c.javaFieldId}" value="${"$"}{${className}.${c.javaFieldId}}" labelName="${c.javaFieldName}" labelValue="${"$"}{${className}.${c.javaFieldName}}"
+						title="部门" url="/sys/office/treeData?type=2" cssClass="form-control <#if c.isNull != "1">required</#if>" allowClear="true" notAllowSelectParent="true"/>
+				<#elseif c.showType == "areaselect">
+					<sys:treeselect id="${c.simpleJavaField}" name="${c.javaFieldId}" value="${"$"}{${className}.${c.javaFieldId}}" labelName="${c.javaFieldName}" labelValue="${"$"}{${className}.${c.javaFieldName}}"
+						title="区域" url="/sys/area/treeData" cssClass="form-control <#if c.isNull != "1">required</#if>" allowClear="true" notAllowSelectParent="true"/>
+				<#elseif c.showType == "fileselect">
+					<form:hidden id="${c.simpleJavaField}" path="${c.javaFieldId}" htmlEscape="false"<#if c.dataLength != "0"> maxlength="${c.dataLength}"</#if> class="form-control"/>
+					<sys:ckfinder input="${c.simpleJavaField}" type="files" uploadPath="/${moduleName}<#if subModuleName != "">/${subModuleName}</#if>/${className}" selectMultiple="true"/>
+				</#if>
+				
+				</td>
+			</tr>
+			</#if>
+		</#list>
+		</tbody>
+	</table>
+	</form:form>
+</body>
+</html>]]>
+	</content>
+</template>

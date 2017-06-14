@@ -34,7 +34,13 @@
 
 支持基于嵌入式Tomcat的HTTP remoting体系：基于嵌入式tomcat实现dubbo的 HTTP remoting体系（即dubbo-remoting-http），用以逐步取代Dubbo中旧版本的嵌入式Jetty，可以显著的提高REST等的远 程调用性能，并将Servlet API的支持从2.5升级到3.1。（注：除了REST，dubbo中的WebServices、Hessian、HTTP Invoker等协议都基于这个HTTP remoting体系）。
 
-RepositoryORM仓库,提供ORM接口和多种实现,可进行配置实现。RepositoryRedis仓库,提供Redis接口和多种实现,可进行配置实现。RepositoryService仓库,提供Service接口和多种实现,可进行配置实现。
+# ORM/Redis/Service仓库
+
+RepositoryORM仓库,提供ORM接口和多种实现,可进行配置实现。
+
+RepositoryRedis仓库,提供Redis接口和多种实现,可进行配置实现。
+
+RepositoryService仓库,提供Service接口和多种实现,可进行配置实现。
 
 # 技术选型
 1.	使用目前流行的多种web技术，包括spring mvc、mybatis。

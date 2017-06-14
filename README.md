@@ -1,29 +1,69 @@
-#JeeRTD
+#JeeRTD¼ò½é
+  JeeRTDÊÇ¹Ù·½·Ö²¼Ê½Î¢·þÎñ¼¯Èº¿ªÔ´¿ò¼Ü£¬Ê¹ÓÃspring mvc¡¢mybatis¡¢alibaba dubbo ·Ö²¼Ê½¡¢Î¢·þÎñ¡¢¼¯Èº¡¢´úÂëÉú³É£¨Ç°¶Ë½çÃæ¡¢µ×²ã´úÂë¡¢dubbo¡¢Î¢·þÎñµÄÉú³É£©µÈºËÐÄ¼¼Êõ¡£
 
-#JeeRTD åˆ†å¸ƒå¼å¾®æœåŠ¡å¼€å‘å¹³å°
-#ç®€ä»‹
-JeeRTDæ˜¯å®˜æ–¹åˆ†å¸ƒå¼å¾®æœåŠ¡é›†ç¾¤å¼€æºæ¡†æž¶ï¼Œä½¿ç”¨spring mvcã€mybatisã€alibaba dubbo åˆ†å¸ƒå¼ã€å¾®æœåŠ¡ã€é›†ç¾¤ã€ä»£ç ç”Ÿæˆï¼ˆå‰ç«¯ç•Œé¢ã€åº•å±‚ä»£ç ã€dubboã€å¾®æœåŠ¡çš„ç”Ÿæˆï¼‰ç­‰æ ¸å¿ƒæŠ€æœ¯ã€‚
-DUBBOæ˜¯ä¸€ä¸ªåˆ†å¸ƒå¼æœåŠ¡æ¡†æž¶ï¼Œè‡´åŠ›äºŽæä¾›é«˜æ€§èƒ½å’Œé€æ˜ŽåŒ–çš„RPCè¿œç¨‹æœåŠ¡è°ƒç”¨æ–¹æ¡ˆï¼Œæ˜¯é˜¿é‡Œå·´å·´SOAæœåŠ¡åŒ–æ²»ç†æ–¹æ¡ˆçš„æ ¸å¿ƒæ¡†æž¶ï¼Œæ¯å¤©ä¸º2,000+ä¸ªæœåŠ¡æä¾›3,000,000,000+æ¬¡è®¿é—®é‡æ”¯æŒï¼Œå¹¶è¢«å¹¿æ³›åº”ç”¨äºŽé˜¿é‡Œå·´å·´é›†å›¢çš„å„æˆå‘˜ç«™ç‚¹ã€‚
-å¾®æœåŠ¡æ˜¯åˆ©ç”¨äº‘å¹³å°å¼€å‘ä¼ä¸šåº”ç”¨ç¨‹åºçš„æœ€æ–°æŠ€æœ¯ï¼Œå®ƒæ˜¯å°åž‹ã€è½»é‡å’Œè¿‡ç¨‹é©±åŠ¨çš„ç»„ä»¶ã€‚å¾®æœåŠ¡é€‚åˆè®¾è®¡å¯æ‰©å±•ã€æ˜“äºŽç»´æŠ¤çš„åº”ç”¨ç¨‹åºã€‚å®ƒå¯ä»¥ä½¿å¼€å‘æ›´å®¹æ˜“ï¼Œè¿˜èƒ½ä½¿èµ„æºå¾—åˆ°æœ€ä½³åˆ©ç”¨ã€‚
-RepositoryORM,æä¾›æŽ¥å£å’Œå¤šå°‘å®žçŽ°,å¯è¿›è¡Œé…ç½®å®žçŽ°ã€‚
-RepositoryRedis,æä¾›æŽ¥å£å’Œå¤šå°‘å®žçŽ°,å¯è¿›è¡Œé…ç½®å®žçŽ°ã€‚
-RepositoryService,æä¾›æŽ¥å£å’Œå¤šå°‘å®žçŽ°,å¯è¿›è¡Œé…ç½®å®žçŽ°ã€‚
-#æŠ€æœ¯é€‰åž‹
-æŠ€æœ¯é€‰åž‹: ä½¿ç”¨ç›®å‰æµè¡Œçš„å¤šç§webæŠ€æœ¯ï¼ŒåŒ…æ‹¬spring mvcã€mybatisã€alibaba dubbo åˆ†å¸ƒå¼ã€å¾®æœåŠ¡ã€é›†ç¾¤ã€ä»£ç ç”Ÿæˆï¼ˆå‰ç«¯ç•Œé¢ã€åº•å±‚ä»£ç ã€dubboã€å¾®æœåŠ¡çš„ç”Ÿæˆï¼‰ã€‚
-RepositoryORM,æä¾›æŽ¥å£å’Œå¤šå°‘å®žçŽ°,å¯è¿›è¡Œé…ç½®å®žçŽ°ã€‚
-RepositoryRedis,æä¾›æŽ¥å£å’Œå¤šå°‘å®žçŽ°,å¯è¿›è¡Œé…ç½®å®žçŽ°ã€‚
-RepositoryService,æä¾›æŽ¥å£å’Œå¤šå°‘å®žçŽ°,å¯è¿›è¡Œé…ç½®å®žçŽ°ã€‚
-#ä»£ç ç”Ÿæˆå™¨
+ DUBBOÊÇÒ»¸ö·Ö²¼Ê½·þÎñ¿ò¼Ü£¬ÖÂÁ¦ÓÚÌá¹©¸ßÐÔÄÜºÍÍ¸Ã÷»¯µÄRPCÔ¶³Ì·þÎñµ÷ÓÃ·½°¸£¬·Ö²¼Ê½Î¢·þÎñ¼¯ÈººËÐÄ¿ò¼Ü£¬Ã¿ÌìÎª2,000+¸ö·þÎñÌá¹©3,000,000,000+´Î·ÃÎÊÁ¿Ö§³Ö¡£
+
+ Î¢·þÎñÊÇÀûÓÃÔÆÆ½Ì¨¿ª·¢ÆóÒµÓ¦ÓÃ³ÌÐòµÄ×îÐÂ¼¼Êõ£¬ËüÊÇÐ¡ÐÍ¡¢ÇáÁ¿ºÍ¹ý³ÌÇý¶¯µÄ×é¼þ¡£Î¢·þÎñÊÊºÏÉè¼Æ¿ÉÀ©Õ¹¡¢Ò×ÓÚÎ¬»¤µÄÓ¦ÓÃ³ÌÐò¡£Ëü¿ÉÒÔÊ¹¿ª·¢¸üÈÝÒ×£¬»¹ÄÜÊ¹×ÊÔ´µÃµ½×î¼ÑÀûÓÃ¡£
+
+#·Ö²¼Ê½¼¯Èº
+  ÔÚ´ó¹æÄ£·þÎñ»¯Ö®Ç°£¬Ó¦ÓÃ¿ÉÄÜÖ»ÊÇÍ¨¹ýRMI»òHessianµÈ¹¤¾ß£¬¼òµ¥µÄ±©Â¶ºÍÒýÓÃÔ¶³Ì·þÎñ£¬Í¨¹ýÅäÖÃ·þÎñµÄURLµØÖ·½øÐÐµ÷ÓÃ£¬Í¨¹ýF5µÈÓ²¼þ½øÐÐ¸ºÔØ¾ùºâ¡£
+
+(1) µ±·þÎñÔ½À´Ô½¶àÊ±£¬·þÎñURLÅäÖÃ¹ÜÀí±äµÃ·Ç³£À§ÄÑ£¬F5Ó²¼þ¸ºÔØ¾ùºâÆ÷µÄµ¥µãÑ¹Á¦Ò²Ô½À´Ô½´ó¡£
+
+´ËÊ±ÐèÒªÒ»¸ö·þÎñ×¢²áÖÐÐÄ£¬¶¯Ì¬µÄ×¢²áºÍ·¢ÏÖ·þÎñ£¬Ê¹·þÎñµÄÎ»ÖÃÍ¸Ã÷¡£
+
+²¢Í¨¹ýÔÚÏû·Ñ·½»ñÈ¡·þÎñÌá¹©·½µØÖ·ÁÐ±í£¬ÊµÏÖÈí¸ºÔØ¾ùºâºÍFailover£¬½µµÍ¶ÔF5Ó²¼þ¸ºÔØ¾ùºâÆ÷µÄÒÀÀµ£¬Ò²ÄÜ¼õÉÙ²¿·Ö³É±¾¡£
+
+(2) µ±½øÒ»²½·¢Õ¹£¬·þÎñ¼äÒÀÀµ¹ØÏµ±äµÃ´í×Ù¸´ÔÓ£¬ÉõÖÁ·Ö²»ÇåÄÄ¸öÓ¦ÓÃÒªÔÚÄÄ¸öÓ¦ÓÃÖ®Ç°Æô¶¯£¬¼Ü¹¹Ê¦¶¼²»ÄÜÍêÕûµÄÃèÊöÓ¦ÓÃµÄ¼Ü¹¹¹ØÏµ¡£
+
+ÕâÊ±£¬ÐèÒª×Ô¶¯»­³öÓ¦ÓÃ¼äµÄÒÀÀµ¹ØÏµÍ¼£¬ÒÔ°ïÖú¼Ü¹¹Ê¦ÀíÇåÀí¹ØÏµ¡£
+
+(3) ½Ó×Å£¬·þÎñµÄµ÷ÓÃÁ¿Ô½À´Ô½´ó£¬·þÎñµÄÈÝÁ¿ÎÊÌâ¾Í±©Â¶³öÀ´£¬Õâ¸ö·þÎñÐèÒª¶àÉÙ»úÆ÷Ö§³Å£¿Ê²Ã´Ê±ºò¸Ã¼Ó»úÆ÷£¿
+
+ÎªÁË½â¾öÕâÐ©ÎÊÌâ£¬µÚÒ»²½£¬Òª½«·þÎñÏÖÔÚÃ¿ÌìµÄµ÷ÓÃÁ¿£¬ÏìÓ¦Ê±¼ä£¬¶¼Í³¼Æ³öÀ´£¬×÷ÎªÈÝÁ¿¹æ»®µÄ²Î¿¼Ö¸±ê¡£
+
+Æä´Î£¬Òª¿ÉÒÔ¶¯Ì¬µ÷ÕûÈ¨ÖØ£¬ÔÚÏßÉÏ£¬½«Ä³Ì¨»úÆ÷µÄÈ¨ÖØÒ»Ö±¼Ó´ó£¬²¢ÔÚ¼Ó´óµÄ¹ý³ÌÖÐ¼ÇÂ¼ÏìÓ¦Ê±¼äµÄ±ä»¯£¬Ö±µ½ÏìÓ¦Ê±¼äµ½´ï·§Öµ£¬¼ÇÂ¼´ËÊ±µÄ·ÃÎÊÁ¿£¬ÔÙÒÔ´Ë·ÃÎÊÁ¿³ËÒÔ»úÆ÷Êý·´ÍÆ×ÜÈÝÁ¿¡£
+
+
+#Î¢·þÎñ¹¦ÄÜ°üÀ¨£º
+  Ö§³ÖREST·ç¸ñÔ¶³Ìµ÷ÓÃ£¨HTTP + JSON/XML)£º»ùÓÚ·Ç³£³ÉÊìµÄJBoss RestEasy¿ò¼Ü£¬ÔÚdubboÖÐÊµÏÖÁËREST·ç¸ñ£¨HTTP + JSON/XML£©µÄÔ¶³Ìµ÷ÓÃ£¬ÒÔÏÔÖø¼ò»¯ÆóÒµÄÚ²¿µÄ¿çÓïÑÔ½»»¥£¬Í¬Ê±ÏÔÖø¼ò»¯ÆóÒµ¶ÔÍâµÄOpen API¡¢ÎÞÏßAPIÉõÖÁAJAX·þÎñ¶ËµÈµÈµÄ¿ª·¢¡£
+
+ÊÂÊµÉÏ£¬Õâ¸öRESTµ÷ÓÃÒ²Ê¹µÃDubbo¿ÉÒÔ¶Ôµ±½ñÌØ±ðÁ÷ÐÐµÄ¡°Î¢·þÎñ¡±¼Ü¹¹Ìá¹©»ù´¡ÐÔÖ§³Ö¡£ ÁíÍâ£¬RESTµ÷ÓÃÒ²´ïµ½ÁË±È½Ï¸ßµÄÐÔÄÜ£¬ÔÚ»ù×¼²âÊÔÏÂ£¬HTTP + JSONÓëDubbo 2.xÄ¬ÈÏµÄRPCÐ­Òé£¨¼´TCP + Hessian2¶þ½øÖÆÐòÁÐ»¯£©Ö®¼äÖ»ÓÐ1.5±¶×óÓÒµÄ²î¾à£¬Ïê¼ûÏÂÎÄµÄ»ù×¼²âÊÔ±¨¸æ¡£
+
+Ö§³Ö»ùÓÚKryoºÍFSTµÄJava¸ßÐ§ÐòÁÐ»¯ÊµÏÖ£º»ùÓÚµ±½ñ±È½ÏÖªÃûµÄKryoºÍFST¸ßÐÔÄÜÐòÁÐ»¯¿â£¬ÎªDubbo Ä¬ÈÏµÄRPCÐ­ÒéÌí¼ÓÐÂµÄÐòÁÐ»¯ÊµÏÖ£¬²¢ÓÅ»¯µ÷ÕûÁËÆäÐòÁÐ»¯ÌåÏµ£¬±È½ÏÏÔÖøµÄÌá¸ßÁËDubbo RPCµÄÐÔÄÜ£¬Ïê¼ûÏÂÍ¼ºÍÎÄµµÖÐµÄ»ù×¼²âÊÔ±¨¸æ¡£
+
+Ö§³Ö»ùÓÚÇ¶ÈëÊ½TomcatµÄHTTP remotingÌåÏµ£º»ùÓÚÇ¶ÈëÊ½tomcatÊµÏÖdubboµÄ HTTP remotingÌåÏµ£¨¼´dubbo-remoting-http£©£¬ÓÃÒÔÖð²½È¡´úDubboÖÐ¾É°æ±¾µÄÇ¶ÈëÊ½Jetty£¬¿ÉÒÔÏÔÖøµÄÌá¸ßRESTµÈµÄÔ¶ ³Ìµ÷ÓÃÐÔÄÜ£¬²¢½«Servlet APIµÄÖ§³Ö´Ó2.5Éý¼¶µ½3.1¡££¨×¢£º³ýÁËREST£¬dubboÖÐµÄWebServices¡¢Hessian¡¢HTTP InvokerµÈÐ­Òé¶¼»ùÓÚÕâ¸öHTTP remotingÌåÏµ£©¡£
+
+RepositoryORM²Ö¿â,Ìá¹©ORM½Ó¿ÚºÍ¶àÖÖÊµÏÖ,¿É½øÐÐÅäÖÃÊµÏÖ¡£RepositoryRedis²Ö¿â,Ìá¹©Redis½Ó¿ÚºÍ¶àÖÖÊµÏÖ,¿É½øÐÐÅäÖÃÊµÏÖ¡£RepositoryService²Ö¿â,Ìá¹©Service½Ó¿ÚºÍ¶àÖÖÊµÏÖ,¿É½øÐÐÅäÖÃÊµÏÖ¡£
+
+#¼¼ÊõÑ¡ÐÍ
+1.	Ê¹ÓÃÄ¿Ç°Á÷ÐÐµÄ¶àÖÖweb¼¼Êõ£¬°üÀ¨spring mvc¡¢mybatis¡£
+
+2.	alibaba dubbo ·Ö²¼Ê½¡¢Î¢·þÎñ¡¢¼¯Èº¡¢zookeper
+
+3.	´úÂëÉú³É£¨Ç°¶Ë½çÃæ¡¢µ×²ã´úÂë¡¢dubbo¡¢Î¢·þÎñµÄÉú³É£©
+
+4.	RepositoryORM²Ö¿â,Ìá¹©ORM½Ó¿ÚºÍ¶àÖÖÊµÏÖ,¿É½øÐÐÅäÖÃÊµÏÖ¡£
+
+5.	RepositoryRedis²Ö¿â,Ìá¹©Redis½Ó¿ÚºÍ¶àÖÖÊµÏÖ,¿É½øÐÐÅäÖÃÊµÏÖ¡£
+
+6.	RepositoryService²Ö¿â,Ìá¹©Service½Ó¿ÚºÍ¶àÖÖÊµÏÖ,¿É½øÐÐÅäÖÃÊµÏÖ¡£
+
+#´úÂëÉú³ÉÆ÷
 1.	spring mvc
 2.	mybatis
 3.	alibaba dubbo
-4.	å¾®æœåŠ¡
-5.	é›†ç¾¤
-6.	å‰ç«¯ç•Œé¢
+4.	Î¢·þÎñ
+5.	¼¯Èº
+6.	Ç°¶Ë½çÃæ
 
-#å¦‚ä½•äº¤æµã€åé¦ˆã€å‚ä¸Žè´¡çŒ®ï¼Ÿ
-GitHubï¼šhttps://github.com/HuangBingGui/JeeRTD.git
-å¼€æºä¸­å›½ï¼šhttp://git.oschina.net/guanshijiehnan/JeeRTD
+#ÈçºÎ½»Á÷¡¢·´À¡¡¢²ÎÓë¹±Ï×£¿
+
+JeeRTD¹Ù·½QQÈº£º328910546
+
+GitHub£ºhttps://github.com/HuangBingGui/JeeRTD.git
+
+¿ªÔ´ÖÐ¹ú£ºhttp://git.oschina.net/guanshijiehnan/JeeRTD
 
 
 

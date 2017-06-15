@@ -5,7 +5,7 @@
 
  微服务是利用云平台开发企业应用程序的最新技术，它是小型、轻量和过程驱动的组件。微服务适合设计可扩展、易于维护的应用程序。它可以使开发更容易，还能使资源得到最佳利用。
 
-# 分布式集群
+# 分布式/集群(zookeeper)
   在大规模服务化之前，应用可能只是通过RMI或Hessian等工具，简单的暴露和引用远程服务，通过配置服务的URL地址进行调用，通过F5等硬件进行负载均衡。
 
 (1) 当服务越来越多时，服务URL配置管理变得非常困难，F5硬件负载均衡器的单点压力也越来越大。
@@ -25,7 +25,7 @@
 其次，要可以动态调整权重，在线上，将某台机器的权重一直加大，并在加大的过程中记录响应时间的变化，直到响应时间到达阀值，记录此时的访问量，再以此访问量乘以机器数反推总容量。
 
 
-# 微服务
+# 微服务/集群(nignx)
   支持REST风格远程调用（HTTP + JSON/XML)：基于非常成熟的JBoss RestEasy框架，在dubbo中实现了REST风格（HTTP + JSON/XML）的远程调用，以显著简化企业内部的跨语言交互，同时显著简化企业对外的Open API、无线API甚至AJAX服务端等等的开发。
 
 事实上，这个REST调用也使得Dubbo可以对当今特别流行的“微服务”架构提供基础性支持。 另外，REST调用也达到了比较高的性能，在基准测试下，HTTP + JSON与Dubbo 2.x默认的RPC协议（即TCP + Hessian2二进制序列化）之间只有1.5倍左右的差距，详见下文的基准测试报告。
@@ -42,7 +42,7 @@ RepositoryRedis仓库,提供Redis接口和多种实现,可进行配置实现。
 
 RepositoryService仓库,提供Service接口和多种实现,可进行配置实现。
 
-# 技术选型
+#技术选型
 1.	使用目前流行的多种web技术，包括spring mvc、mybatis。
 
 2.	alibaba dubbo 分布式、微服务、集群、zookeper
@@ -57,11 +57,12 @@ RepositoryService仓库,提供Service接口和多种实现,可进行配置实现。
 
 # 代码生成器
 1.	spring mvc
-2.	mybatis
-3.	alibaba dubbo
-4.	微服务
-5.	集群
-6.	前端界面
+2.	Redis
+3.	mybatis
+4.	alibaba dubbo
+5.	微服务
+6.	集群
+7.	前端界面
 
 # 如何交流、反馈、参与贡献？
 
@@ -71,8 +72,7 @@ GitHub：https://github.com/HuangBingGui/JeeRTD.git
 
 开源中国：http://git.oschina.net/guanshijiehnan/JeeRTD
 
-# 成就大家，也成就自己。
+# 成就大家，成就平台，也成就自己。
 
-成就大家，也成就自己。
-
+成就大家，成就平台，也成就自己。
 

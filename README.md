@@ -4,7 +4,7 @@
 官网地址：https://jeespring.icoc.bz/<br>
 论坛社区：<a href="https://jeespring.kf5.com/hc/community/topic/" target="_blank">https://jeespring.kf5.com/hc/community/topic/</a><br>
 
-帮忙标星、点赞，申请码云最有价值开源项
+帮忙标星、点赞，申请码云最有价值开源项<br>
 JeeSpring开源中国：<a href="https://gitee.com/JeeHuangBingGui/jeeSpringCloud" target="_blank">https://gitee.com/JeeHuangBingGui/jeeSpringCloud</a><br>
 
 有部分功能会提示：演示版启用为系统能正常演示，暂时不允许操作！<br>

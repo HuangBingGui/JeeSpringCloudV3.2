@@ -68,22 +68,72 @@ Redis分布式高速缓存:代码生成直接生成Redis对接代码。
 
 JeeSpringCloudV3.0-互联网云快速开发框架（后台）
 
-微服务	微服务
-微服务	微服务
-微服务	微服务
-微服务	微服务
-微服务	微服务
-微服务	微服务
-微服务	微服务
-微服务	微服务
-微服务	微服务
-微服务	微服务
-微服务	微服务
-微服务	微服务
-微服务	微服务
-微服务	微服务
-微服务	微服务
-微服务	微服务
+<table><tbody>
+<tr>
+<td><img alt="微服务" src="https://gitee.com/JeeHuangBingGui/jeeSpringCloud/raw/master/document/All.gif"></td>
+<td><img alt="微服务" src="https://gitee.com/JeeHuangBingGui/jeeSpringCloud/raw/master/document/001.png"></td>
+</tr>
+<tr>
+<td><img alt="微服务" src="https://gitee.com/JeeHuangBingGui/jeeSpringCloud/raw/master/document/RepositoryService.jpg"></td>
+<td><img alt="微服务" src="https://gitee.com/JeeHuangBingGui/jeeSpringCloud/raw/master/document/login6.png"></td>
+</tr>
+<tr>
+<td><img alt="微服务" src="https://gitee.com/JeeHuangBingGui/jeeSpringCloud/raw/master/document/login1.png"></td>
+<td><img alt="微服务" src="https://gitee.com/JeeHuangBingGui/jeeSpringCloud/raw/master/document/login2.png"></td>
+</tr>
+<tr>
+<td><img alt="微服务" src="https://gitee.com/JeeHuangBingGui/jeeSpringCloud/raw/master/document/login4.png"></td>
+<td><img alt="微服务" src="https://gitee.com/JeeHuangBingGui/jeeSpringCloud/raw/master/document/login5.png"></td>
+</tr>
+<tr>
+<td><img alt="微服务" src="https://gitee.com/JeeHuangBingGui/jeeSpringCloud/raw/master/document/07.png"></td>
+<td><img alt="微服务" src="https://gitee.com/JeeHuangBingGui/jeeSpringCloud/raw/master/document/01.png"></td>
+</tr>
+<tr>
+<td><img alt="微服务" src="https://gitee.com/JeeHuangBingGui/jeeSpringCloud/raw/master/document/0101.png"></td>
+<td><img alt="微服务" src="https://gitee.com/JeeHuangBingGui/jeeSpringCloud/raw/master/document/02.png"></td>
+</tr>
+<tr>
+<td><img alt="微服务" src="https://gitee.com/JeeHuangBingGui/jeeSpringCloud/raw/master/document/06.png"></td>
+<td><img alt="微服务" src="https://gitee.com/JeeHuangBingGui/jeeSpringCloud/raw/master/document/05.png"></td>
+</tr>
+<tr>
+<td><img alt="微服务" src="https://gitee.com/JeeHuangBingGui/jeeSpringCloud/raw/master/document/03.png"></td>
+<td><img alt="微服务" src="https://gitee.com/JeeHuangBingGui/jeeSpringCloud/raw/master/document/04.png"></td>
+</tr>
+<tr>
+<td><img alt="微服务" src="https://gitee.com/JeeHuangBingGui/jeeSpringCloud/raw/master/document/101.jpg"></td>
+<td><img alt="微服务" src="https://gitee.com/JeeHuangBingGui/jeeSpringCloud/raw/master/document/102.jpg"></td>
+</tr>
+<tr>
+<td><img alt="微服务" src="https://gitee.com/JeeHuangBingGui/jeeSpringCloud/raw/master/document/103.jpg"></td>
+<td><img alt="微服务" src="https://gitee.com/JeeHuangBingGui/jeeSpringCloud/raw/master/document/104.jpg"></td>
+</tr>
+<tr>
+<td><img alt="微服务" src="https://gitee.com/JeeHuangBingGui/jeeSpringCloud/raw/master/document/105.jpg"></td>
+<td><img alt="微服务" src="https://gitee.com/JeeHuangBingGui/jeeSpringCloud/raw/master/document/106.jpg"></td>
+</tr>
+<tr>
+<td><img alt="微服务" src="https://gitee.com/JeeHuangBingGui/jeeSpringCloud/raw/master/document/107.jpg"></td>
+<td><img alt="微服务" src="https://gitee.com/JeeHuangBingGui/jeeSpringCloud/raw/master/document/108.jpg"></td>
+</tr>
+<tr>
+<td><img alt="微服务" src="https://gitee.com/JeeHuangBingGui/jeeSpringCloud/raw/master/document/109.jpg"></td>
+<td><img alt="微服务" src="https://gitee.com/JeeHuangBingGui/jeeSpringCloud/raw/master/document/110.jpg"></td>
+</tr>
+<tr>
+<td><img alt="微服务" src="https://gitee.com/JeeHuangBingGui/jeeSpringCloud/raw/master/document/901.png"></td>
+<td><img alt="微服务" src="https://gitee.com/JeeHuangBingGui/jeeSpringCloud/raw/master/document/902.png"></td>
+</tr>
+<tr>
+<td><img alt="微服务" src="https://gitee.com/JeeHuangBingGui/jeeSpringCloud/raw/master/document/903.png"></td>
+<td><img alt="微服务" src="https://gitee.com/JeeHuangBingGui/jeeSpringCloud/raw/master/document/904.png"></td>
+</tr>
+<tr>
+<td><img alt="微服务" src="https://gitee.com/JeeHuangBingGui/jeeSpringCloud/raw/master/document/905.png"></td>
+<td><img alt="微服务" src="https://gitee.com/JeeHuangBingGui/jeeSpringCloud/raw/master/document/906.png"></td>
+</tr>
+</tbody></table>
 四、平台特性
 
 JeeSpringCloud基于SpringBoot+SpringMVC+Mybatis+Redis+SpringCloud+Vue.js微服务分布式代码生成的敏捷开发系统架构。项目代码简洁,注释丰富,上手容易,还同时集中分布式、微服务,同时包含许多基础模块(用户管理,角色管理,部门管理,字典管理等10个模块。成为大众认同、大众参与、成就大众、大众分享的开发平台。JeeSpring官方qq群(328910546)。代码生成前端界面、底层代码（spring mvc、mybatis、Spring boot、Spring Cloud、微服务的生成）、安全框架、视图框架、服务端验证、任务调度、持久层框架、数据库连接池、缓存框架、日志管理、IM等核心技术。努力用心为大中小型企业打造全方位J2EE企业级平台ORM/Redis/Service仓库开发解决方案。一个RepositoryService仓库就直接实现dubbo、微服务、基础服务器对接接口和实现。

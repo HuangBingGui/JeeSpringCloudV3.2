@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeespring.modules.mvvmoa.dao.FormLeavemDao">
+    
+	<sql id="formLeavemColumns">
+		a.id AS "id",
+		a.user_id AS "user.id",
+		a.office_id AS "office.id",
+		a.area_id AS "area.id",
+		a.begin_date AS "beginDate",
+		a.end_date AS "endDate",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		user.name AS "user.name",
+		office.name AS "office.name",
+		area.name AS "area.name"
+	</sql>
+	
+	<sql id="formLeavemJoins">
+		LEFT JOIN sys_user user ON user.id = a.user_id
+		LEFT JOIN sys_office office ON office.id = a.office_id
+		LEFT JOIN sys_area area ON area.id = a.area_id
+	</sql>
+    
+	<select id="get" resultType="FormLeavem">
+		SELECT 
+			<include refid="formLeavemColumns"/>
+		FROM form_leave a
+		<include refid="formLeavemJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="FormLeavem">
+		SELECT 
+			<include refid="formLeavemColumns"/>
+		FROM form_leave a
+		<include refid="formLeavemJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.user_id = #{user.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="FormLeavem">
+		SELECT 
+			<include refid="formLeavemColumns"/>
+		FROM form_leave a
+		<include refid="formLeavemJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO form_leave(
+			id,
+			user_id,
+			office_id,
+			area_id,
+			begin_date,
+			end_date,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{user.id},
+			#{office.id},
+			#{area.id},
+			#{beginDate},
+			#{endDate},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE form_leave SET 	
+			user_id = #{user.id},
+			office_id = #{office.id},
+			area_id = #{area.id},
+			begin_date = #{beginDate},
+			end_date = #{endDate},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM form_leave
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE form_leave SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="FormLeavem" statementType="STATEMENT">
+		select * FROM form_leave  where ${propertyName} = '${value}'
+	</select>
+</mapper>

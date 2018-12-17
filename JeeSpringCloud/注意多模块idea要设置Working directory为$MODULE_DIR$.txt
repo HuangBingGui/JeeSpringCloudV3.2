@@ -1,0 +1,4 @@
+﻿注意多模块idea要设置Working directory为$MODULE_DIR$
+
+在线文档说明：
+https://gitee.com/JeeHuangBingGui/jeeSpringCloud/wikis/pages?title=%E5%A4%9A%E6%A8%A1%E5%9D%97%E8%AE%BF%E9%97%AE%E4%B8%8D%E4%BA%86jsp%E6%88%96%E8%AE%BF%E9%97%AE%E4%B8%8D%E4%BA%86jsp&parent=%E9%83%A8%E7%BD%B2%E5%BC%80%E5%8F%91%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%96%87%E6%A1%A3

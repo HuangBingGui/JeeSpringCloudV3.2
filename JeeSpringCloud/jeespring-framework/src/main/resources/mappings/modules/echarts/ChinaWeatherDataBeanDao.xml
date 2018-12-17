@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeespring.modules.echarts.dao.ChinaWeatherDataBeanDao">
+    
+	<sql id="chinaWeatherDataBeanColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.datestr AS "datestr",
+		a.beijing_maxtemp AS "beijingMaxTemp",
+		a.beijing_mintemp AS "beijingMinTemp",
+		a.changchun_maxtemp AS "changchunMaxTemp",
+		a.changchun_mintemp AS "changchunMinTemp",
+		a.shenyang_maxtemp AS "shenyangMaxTemp",
+		a.shenyang_mintemp AS "shenyangMinTemp",
+		a.haerbin_maxtemp AS "haerbinMaxTemp",
+		a.haerbin_mintemp AS "haerbinMinTemp"
+	</sql>
+	
+	<sql id="chinaWeatherDataBeanJoins">
+	</sql>
+	
+    
+	<select id="get" resultType="ChinaWeatherDataBean" >
+		SELECT 
+			<include refid="chinaWeatherDataBeanColumns"/>
+		FROM test_line_weather_main_city a
+		<include refid="chinaWeatherDataBeanJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ChinaWeatherDataBean" >
+		SELECT 
+			<include refid="chinaWeatherDataBeanColumns"/>
+		FROM test_line_weather_main_city a
+		<include refid="chinaWeatherDataBeanJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ChinaWeatherDataBean" >
+		SELECT 
+			<include refid="chinaWeatherDataBeanColumns"/>
+		FROM test_line_weather_main_city a
+		<include refid="chinaWeatherDataBeanJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO test_line_weather_main_city(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			datestr,
+			beijing_maxtemp,
+			beijing_mintemp,
+			changchun_maxtemp,
+			changchun_mintemp,
+			shenyang_maxtemp,
+			shenyang_mintemp,
+			haerbin_maxtemp,
+			haerbin_mintemp
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{datestr},
+			#{beijingMaxTemp},
+			#{beijingMinTemp},
+			#{changchunMaxTemp},
+			#{changchunMinTemp},
+			#{shenyangMaxTemp},
+			#{shenyangMinTemp},
+			#{haerbinMaxTemp},
+			#{haerbinMinTemp}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE test_line_weather_main_city SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			datestr = #{datestr},
+			beijing_maxtemp = #{beijingMaxTemp},
+			beijing_mintemp = #{beijingMinTemp},
+			changchun_maxtemp = #{changchunMaxTemp},
+			changchun_mintemp = #{changchunMinTemp},
+			shenyang_maxtemp = #{shenyangMaxTemp},
+			shenyang_mintemp = #{shenyangMinTemp},
+			haerbin_maxtemp = #{haerbinMaxTemp},
+			haerbin_mintemp = #{haerbinMinTemp}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM test_line_weather_main_city
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE test_line_weather_main_city SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="ChinaWeatherDataBean" statementType="STATEMENT">
+		select * FROM test_line_weather_main_city  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

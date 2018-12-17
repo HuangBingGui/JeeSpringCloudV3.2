@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<name>viewFormCSS</name>
+	<filePath>src/main/webapp/staticViews/${lastPackageName}/${moduleName}/${subModuleName}</filePath>
+	<fileName>${className}Form.css</fileName>
+	<content><![CDATA[
+@charset "UTF-8";
+]]>
+	</content>
+</template>

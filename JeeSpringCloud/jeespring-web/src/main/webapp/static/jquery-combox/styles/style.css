@@ -1,0 +1,49 @@
+ul{list-style-type:none;margin:0;padding-left:0;}
+li{margin:0;}
+
+@font-face {
+	font-family: 'icomoon';
+	src:url('fonts/icomoon.eot?-fl11l');
+	src:url('fonts/icomoon.eot?#iefix-fl11l') format('embedded-opentype'),
+		url('fonts/icomoon.woff?-fl11l') format('woff'),
+		url('fonts/icomoon.ttf?-fl11l') format('truetype'),
+		url('fonts/icomoon.svg?-fl11l#icomoon') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+.ficomoon{font-family:'icomoon';}
+.icon-angle-top:before {content: "\f102"}.icon-angle-bottom:before {content: "\f103"}
+.combox_border{
+	border:1px solid #c2c2c2;
+	height:38px;
+	width:245px
+	background-color: #FFFFFF;
+    background-image: none;
+    border: 1px solid #e5e6e7;
+    border-radius: 1px;
+    color: inherit;
+    display: block;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+
+}
+.combox_input{
+	border:0;
+	line-height:35px;
+	height:35px;
+	padding-left: 5px;
+	width:85%;
+	vertical-align: middle;
+}
+
+
+
+.combox_border:focus {
+    border-color: #1ab394 !important;
+    box-shadow: none;
+}
+ 
+.combox_button{width:12%;text-align:center;vertical-align: middle;cursor:pointer;border-left:1px solid #c2c2c2}
+.combox_select{border:1px solid #c2c2c2;border-top:0;width:100%;background:rgba(255, 255, 255, 1.0) none repeat scroll 0 0 !important;}
+.combox_select li{overflow:hidden;height:30px;line-height:30px;cursor:pointer;}
+.combox_select a {display: block;line-height: 38px;padding: 0 8px;text-decoration: none;color: #666;}
+.combox_select a:hover {text-decoration: none;background:#f5f5f5}

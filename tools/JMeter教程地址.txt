@@ -1,0 +1,4 @@
+http://www.51testing.com/zhuanti/jmeter.html
+
+让你的 JMeter 像 LoadRunner 那样实时查看每秒事务数(TPS)、事务响应时间(TRT)
+https://blog.csdn.net/defonds/article/details/54576604

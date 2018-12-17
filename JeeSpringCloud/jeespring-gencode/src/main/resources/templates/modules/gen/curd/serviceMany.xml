@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<name>service</name>
+	<filePath>src/main/java/${packageName}/${moduleName}/service/${subModuleName}</filePath>
+	<fileName>${ClassName}Service.java</fileName>
+	<content><![CDATA[
+/**
+ * * Copyright &copy; 2015-2020 <a href="https://gitee.com/JeeHuangBingGui/jeeSpringCloud">JeeSpringCloud</a> All rights reserved..
+ */
+package ${packageName}.${moduleName}.service<#if subModuleName != "">.${subModuleName}</#if>;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.jeespring.common.persistence.Page;
+import com.jeespring.common.service.AbstractBaseService;
+import com.jeespring.common.utils.StringUtils;
+import com.alibaba.fastjson.JSON;
+import com.jeespring.common.redis.RedisUtils;
+import com.jeespring.common.security.MD5Tools;
+import ${packageName}.${moduleName}.entity<#if subModuleName != "">.${subModuleName}</#if>.${ClassName};
+import ${packageName}.${moduleName}.dao<#if subModuleName != "">.${subModuleName}</#if>.${ClassName}Dao;
+<#list table.childList as c>
+import ${packageName}.${moduleName}.entity<#if subModuleName != "">.${subModuleName}</#if>.${c.className?cap_first};
+import ${packageName}.${moduleName}.dao<#if subModuleName != "">.${subModuleName}</#if>.${c.className?cap_first}Dao;
+</#list>
+//import com.alibaba.dubbo.config.annotation.Service;
+import com.jeespring.common.config.Global;
+
+/**
+ * ${functionName}Service
+ * @author ${functionAuthor}
+ * @version ${functionVersion}
+ */
+ //com.alibaba.dubbo.config.annotation.Service(interfaceClass = ISysServerService.class,version = "1.0.0", timeout = 60000)
+@org.springframework.stereotype.Service
+@Transactional(readOnly = true)
+public class ${ClassName}Service extends AbstractBaseService<${ClassName}Dao, ${ClassName}> implements I${ClassName}Service{
+
+	//企业版提供、开源不易！
+
+}]]>
+	</content>
+</template>

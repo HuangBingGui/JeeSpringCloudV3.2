@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeespring.modules.iim.dao.MailDao">
+    
+	<sql id="mailColumns">
+		a.id AS "id",
+		a.title AS "title",
+		a.overview AS "overview",
+		a.content AS "content"
+	</sql>
+	
+	<sql id="mailJoins">
+	</sql>
+    
+	<select id="get" resultType="Mail">
+		SELECT 
+			<include refid="mailColumns"/>
+		FROM iim_mail a
+		<include refid="mailJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Mail">
+		SELECT 
+			<include refid="mailColumns"/>
+		FROM iim_mail a
+		<include refid="mailJoins"/>
+		<where>
+			
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Mail">
+		SELECT 
+			<include refid="mailColumns"/>
+		FROM iim_mail a
+		<include refid="mailJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO iim_mail(
+			id,
+			title,
+			overview,
+			content
+		) VALUES (
+			#{id},
+			#{title},
+			#{overview},
+			#{content}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE iim_mail SET 	
+			title = #{title},
+			overview = #{overview},
+			content = #{content}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM iim_mail
+		WHERE id = #{id}
+	</update>
+	
+	<!-- <update id="deleteByLogic">
+		DELETE FROM iim_mail
+		WHERE id = #{id}
+	</update>-->
+	
+</mapper>

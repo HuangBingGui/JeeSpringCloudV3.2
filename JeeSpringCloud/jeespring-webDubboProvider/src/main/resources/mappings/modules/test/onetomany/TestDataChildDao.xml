@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeespring.modules.test.dao.onetomany.TestDataChildDao">
+    
+	<sql id="testDataChildColumns">
+					a.id AS "id",
+					a.start AS "start.id",
+					a.end AS "end.id",
+					a.price AS "price",
+					a.test_data_main_id AS "testDataMain.id",
+					a.create_by AS "createBy.id",
+					a.create_date AS "createDate",
+					a.update_by AS "updateBy.id",
+					a.update_date AS "updateDate",
+					a.remarks AS "remarks",
+					a.del_flag AS "delFlag",
+		start.name AS "start.name",
+		end.name AS "end.name"
+	</sql>
+
+	<sql id="testDataChildColumnsList">
+					a.id AS "id",
+					a.start AS "start.id",
+					a.end AS "end.id",
+					a.price AS "price",
+					a.test_data_main_id AS "testDataMain.id",
+					a.create_by AS "createBy.id",
+					a.create_date AS "createDate",
+					a.update_by AS "updateBy.id",
+					a.update_date AS "updateDate",
+					a.remarks AS "remarks",
+					a.del_flag AS "delFlag",
+		start.name AS "start.name",
+		end.name AS "end.name"
+	</sql>
+
+	<sql id="testDataChildJoins">
+		LEFT JOIN test_data_main b ON b.id = a.test_data_main_id
+		LEFT JOIN sys_area start ON start.id = a.start
+		LEFT JOIN sys_area end ON end.id = a.end
+	</sql>
+    
+	<select id="get" resultType="TestDataChild">
+		SELECT 
+			<include refid="testDataChildColumns"/>
+		FROM test_data_child a
+		<include refid="testDataChildJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TestDataChild">
+		SELECT 
+			<include refid="testDataChildColumnsList"/>
+		FROM test_data_child a
+		<include refid="testDataChildJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="start != null and start.id != null and start.id != ''">
+				AND a.start = #{start.id}
+			</if>
+			<if test="end != null and end.id != null and end.id != ''">
+				AND a.end = #{end.id}
+			</if>
+			<if test="price != null and price != ''">
+				AND a.price = #{price}
+			</if>
+			<if test="testDataMain != null and testDataMain.id != null and testDataMain.id != ''">
+				AND a.test_data_main_id = #{testDataMain.id}
+			</if>
+			<if test="createBy != null and createBy.id != null and createBy.id != ''">
+				AND a.create_by = #{createBy.id}
+			</if>
+			<if test="createDate != null">
+				AND a.create_date = #{createDate}
+			</if>
+			<if test="updateBy != null and updateBy.id != null and updateBy.id != ''">
+				AND a.update_by = #{updateBy.id}
+			</if>
+			<if test="updateDate != null">
+				AND a.update_date = #{updateDate}
+			</if>
+			<if test="remarks != null and remarks != ''">
+				AND a.remarks = #{remarks}
+			</if>
+			<if test="delFlag != null and delFlag != ''">
+				AND a.del_flag = #{delFlag}
+			</if>
+		</where>
+		<choose>
+			<when test="where !=null and where != ''">
+				AND ${where}
+			</when>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TestDataChild">
+		SELECT 
+			<include refid="testDataChildColumnsList"/>
+		FROM test_data_child a
+		<include refid="testDataChildJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO test_data_child(
+			id,
+			start,
+			end,
+			price,
+			test_data_main_id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{start.id},
+			#{end.id},
+			#{price},
+			#{testDataMain.id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE test_data_child SET 	
+			start = #{start.id},
+			end = #{end.id},
+			price = #{price},
+			test_data_main_id = #{testDataMain.id},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM test_data_child
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE test_data_main_id = #{testDataMain.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE test_data_child SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE test_data_main_id = #{testDataMain.id}
+			</otherwise>
+		</choose>
+	</update>
+
+	<select id="findUniqueByProperty" resultType="TestDataChild" statementType="STATEMENT">
+		select * FROM test_data_child  where ${propertyName} = '${value}'
+	</select>
+
+	<select id="total" resultType="TestDataChild">
+		SELECT
+			<choose>
+				<when test=" totalType != null and totalType != ''">
+					DATE_FORMAT(a.create_date,'${totalType}') as totalDate,
+				</when>
+				<otherwise>
+				 </otherwise>
+			</choose>
+			count(*) as totalCount
+		FROM
+			test_data_child a
+		<where>
+			1=1
+			and a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="start != null and start.id != null and start.id != ''">
+				AND a.start = #{start.id}
+			</if>
+			<if test="end != null and end.id != null and end.id != ''">
+				AND a.end = #{end.id}
+			</if>
+			<if test="price != null and price != ''">
+				AND a.price = #{price}
+			</if>
+			<if test="testDataMain != null and testDataMain.id != null and testDataMain.id != ''">
+				AND a.test_data_main_id = #{testDataMain.id}
+			</if>
+			<if test="createBy != null and createBy.id != null and createBy.id != ''">
+				AND a.create_by = #{createBy.id}
+			</if>
+			<if test="createDate != null">
+				AND a.create_date = #{createDate}
+			</if>
+			<if test="updateBy != null and updateBy.id != null and updateBy.id != ''">
+				AND a.update_by = #{updateBy.id}
+			</if>
+			<if test="updateDate != null">
+				AND a.update_date = #{updateDate}
+			</if>
+			<if test="remarks != null and remarks != ''">
+				AND a.remarks = #{remarks}
+			</if>
+			<if test="delFlag != null and delFlag != ''">
+				AND a.del_flag = #{delFlag}
+			</if>
+		</where>
+		<choose>
+			<when test=" groupBy != null and groupBy != '' and totalType != null and totalType != '' ">
+				GROUP BY DATE_FORMAT(a.create_date,'${totalType}'),${groupBy}
+			</when>
+			<when test=" groupBy != null and groupBy != ''">
+				GROUP BY ${groupBy}
+			</when>
+			<when test=" totalType != null and totalType != ''">
+				GROUP BY DATE_FORMAT(a.create_date,'${totalType}')
+			</when>
+			<otherwise>
+			 </otherwise>
+		</choose>
+		<choose>
+			<when test=" orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+</mapper>

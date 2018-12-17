@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+    <name>viewForm</name>
+    <filePath>src/main/webapp/WEB-INF/views/${lastPackageName}/${moduleName}/${subModuleName}</filePath>
+    <fileName>${className}Form.jsp</fileName>
+    <content><![CDATA[
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ include file="/WEB-INF/views/include/taglib.jsp"%>
+<html>
+<head>
+	<title>${functionNameSimple}管理</title>
+    <%@ include file="/WEB-INF/views/include/headMeta.jsp" %>
+    <%@ include file="/WEB-INF/views/include/headCss.jsp" %>
+    <%@ include file="/WEB-INF/views/include/headJs.jsp" %>
+</head>
+<body>
+<!-- 内容-->
+<div class="wrapper">
+    <!-- 内容盒子-->
+    <div class="box box-main">
+        <!-- 内容盒子头部 -->
+        <div class="box-header">
+            <div class="box-title"><i class="fa fa-edit"></i>
+                ${functionNameSimple}管理
+            </div>
+        </div>
+        <!-- 内容盒子身体 -->
+        <div class="box-body">
+
+			<form:form id="inputForm" modelAttribute="${className}" action="${r"${ctx}"}/${urlPrefix}/save" method="post" class="form-horizontal content-background">
+				<div class="content">
+					<form:hidden path="id"/>
+					<sys:message content="${r"${message}"}"/>
+					<div class="form-unit">基本信息</div>
+				<#list table.columnList as c>
+					<#if c.isEdit?? && c.isEdit == "1" && (c.isNotBaseField || c.simpleJavaField == 'remarks')>
+						<div class="form-group">
+							<label class="col-sm-2 pull-left">${c.comments}<#if c.isNull != "1"><font color="red">*</font></#if></label>
+							<div class="col-sm-9 col-lg-10 col-xs-12">
+						<#if c.showType == "input">
+								<#if c.javaType?? && c.javaType != "byte[]">
+									<form:input placeholder="${c.comments}" path="${c.javaFieldId}" htmlEscape="false"<#if c.dataLength != "0"> maxlength="${c.dataLength}"</#if> class="form-control <#if c.isNull != "1">required</#if><#if c.javaType == "Long" || c.javaType == "Integer"> digits</#if><#if c.javaType == "Double"> number</#if>"/>
+								<#else>
+									<form:input placeholder="${c.comments}" path="${c.javaFieldId}Text" htmlEscape="false"<#if c.dataLength != "0"> maxlength="${c.dataLength}"</#if> class="form-control <#if c.isNull != "1">required</#if><#if c.javaType == "Long" || c.javaType == "Integer"> digits</#if><#if c.javaType == "Double"> number</#if>"/>
+								</#if>
+								<div class="help-block">请填写${c.comments}</div>
+						<#elseif c.showType == "textarea">
+								<#if c.javaType?? && c.javaType != "byte[]">
+									<form:textarea path="${c.javaFieldId}" htmlEscape="false" rows="4"<#if c.dataLength != "0"> maxlength="${c.dataLength}"</#if> class="form-control <#if c.isNull != "1">required</#if>"/>
+								<#else>
+									<form:textarea path="${c.javaFieldId}Text" htmlEscape="false" rows="4"<#if c.dataLength != "0"> maxlength="${c.dataLength}"</#if> class="form-control <#if c.isNull != "1">required</#if>"/>
+								</#if>
+						<#elseif c.showType == "text">
+								<#if c.javaType?? && c.javaType != "byte[]">
+									<form:textarea path="${c.javaFieldId}" htmlEscape="false" rows="4"<#if c.dataLength != "0"> maxlength="${c.dataLength}"</#if> class="form-control <#if c.isNull != "1">required</#if>"/>
+									<sys:ckeditor replace="${c.javaFieldId}" height="400" uploadPath="/${moduleName}<#if subModuleName != "">/${subModuleName}</#if>/${className}" />
+								<#else>
+									<form:textarea path="${c.javaFieldId}Text" htmlEscape="false" rows="4"<#if c.dataLength != "0"> maxlength="${c.dataLength}"</#if> class="form-control <#if c.isNull != "1">required</#if>"/>
+									<sys:ckeditor replace="${c.javaFieldId}Text" height="400" uploadPath="/${moduleName}<#if subModuleName != "">/${subModuleName}</#if>/${className}" />
+								</#if>
+						<#elseif c.showType == "select">
+									<form:select path="${c.javaFieldId}" class="form-control <#if c.isNull != "1">required</#if>">
+										<form:option value="" label=""/>
+										<form:options items="${"$"}{fns:getDictList('${c.dictType}')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+									</form:select>
+									<div class="help-block">请选择${c.comments}</div>
+						<#elseif c.showType == "checkbox">
+									<form:checkboxes path="${c.javaFieldId}" items="${"$"}{fns:getDictList('${c.dictType}')}" itemLabel="label" itemValue="value" htmlEscape="false" class="i-checks <#if c.isNull != "1">required</#if>"/>
+									<script type="text/javascript">
+										${"$"}(document).ready(function() {
+											${"$"}("[name=${c.javaFieldId}]").each(function(){
+												var ${c.javaFieldId}="${"$"}{${className}.${c.javaFieldId}}";
+												var ${c.javaFieldId}Item = ${c.javaFieldId}.split(",");
+												for(var i=0;i<=${c.javaFieldId}Item.length;i++){
+													if(${"$"}(this).val()==${c.javaFieldId}Item[i]) {
+														${"$"}(this).attr("checked", "true");
+														${"$"}(this).parent().addClass("checked");
+													}
+												}
+											});
+										});
+									</script>
+									<div class="help-block">请选择${c.comments}</div>
+						<#elseif c.showType == "radiobox">
+									<form:radiobuttons path="${c.javaFieldId}" items="${"$"}{fns:getDictList('${c.dictType}')}" itemLabel="label" itemValue="value" htmlEscape="false" class="i-checks <#if c.isNull != "1">required</#if>"/>
+									<div class="help-block">请选择${c.comments}</div>
+						<#elseif c.showType == "dateselect">
+									<input id="${c.javaFieldId}" name="${c.javaFieldId}" type="text" maxlength="20" class="laydate-icon form-control layer-date <#if c.isNull != "1">required</#if>"
+										value="<fmt:formatDate value="${"$"}{${className}.${c.javaFieldId}}" pattern="yyyy-MM-dd HH:mm:ss"/>"/>
+									<div class="help-block">请选择${c.comments}</div>
+						<#elseif c.showType == "userselect">
+									<sys:treeselect id="${c.simpleJavaField}" name="${c.javaFieldId}" value="${"$"}{${className}.${c.javaFieldId}}" labelName="${c.javaFieldName}" labelValue="${"$"}{${className}.${c.javaFieldName}}"
+										title="用户" url="/sys/office/treeData?type=3" cssClass="form-control <#if c.isNull != "1">required</#if>" allowClear="true" notAllowSelectParent="true"/>
+									<div class="help-block">请选择${c.comments}</div>
+						<#elseif c.showType == "officeselect">
+									<sys:treeselect id="${c.simpleJavaField}" name="${c.javaFieldId}" value="${"$"}{${className}.${c.javaFieldId}}" labelName="${c.javaFieldName}" labelValue="${"$"}{${className}.${c.javaFieldName}}"
+										title="部门" url="/sys/office/treeData?type=2" cssClass="form-control <#if c.isNull != "1">required</#if>" allowClear="true" notAllowSelectParent="true"/>
+									<div class="help-block">请选择${c.comments}</div>
+						<#elseif c.showType == "areaselect">
+									<sys:treeselect id="${c.simpleJavaField}" name="${c.javaFieldId}" value="${"$"}{${className}.${c.javaFieldId}}" labelName="${c.javaFieldName}" labelValue="${"$"}{${className}.${c.javaFieldName}}"
+										title="区域" url="/sys/area/treeData" cssClass="form-control <#if c.isNull != "1">required</#if>" allowClear="true" notAllowSelectParent="true"/>
+									<div class="help-block">请选择${c.comments}</div>
+						<#elseif c.showType == "fileselect">
+									<form:hidden id="${c.simpleJavaField}" path="${c.javaFieldId}" htmlEscape="false"<#if c.dataLength != "0"> maxlength="${c.dataLength}"</#if> class="form-control"/>
+									<sys:ckfinder input="${c.simpleJavaField}" type="files" uploadPath="/${moduleName}<#if subModuleName != "">/${subModuleName}</#if>/${className}" selectMultiple="true"/>
+									<div class="help-block">请上传${c.comments}</div>
+						</#if>
+							</div>
+						</div>
+					</#if>
+				</#list>
+				    <div class="form-group">
+                        <c:if test="${"$"}{action ne 'view'}">
+                        <a id="btnSubmit" class="btn btn-primary">保存</a>
+                        </c:if>
+                        <a id="btnBack" class="btn btn-default">返回</a>
+                        <!--a class="btn btn-primary" onclick="top.closeSelectTabs()">关闭</a-->
+                    </div>
+				</div>
+		</form:form>
+		 </div>
+    </div>
+</div>
+<div id="messageBox">${r"${message}"}</div>
+<%@ include file="/WEB-INF/views/include/footJs.jsp" %>
+<script src="/staticViews/viewBase.js"></script>
+<script src="/staticViews/${lastPackageName}/${moduleName}/${subModuleName}/${className}Form.js" type="text/javascript"></script>
+<link href="/staticViews/${lastPackageName}/${moduleName}/${subModuleName}/${className}Form.css" rel="stylesheet" />
+</body>
+</html>]]>
+    </content>
+</template>

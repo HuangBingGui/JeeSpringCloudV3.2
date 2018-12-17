@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.company.project.modules.ylttrip.dao.TfTicketDao">
+    
+	<sql id="tfTicketColumns">
+					a.ticket_id AS "id",
+					a.ticket_no AS "ticketNo",
+					a.goods_no AS "goodsNo",
+					a.goods_item_id AS "goodsItemId",
+					a.goods_item_name AS "goodsItemName",
+					a.goods_num AS "goodsNum",
+					a.price AS "price",
+					a.sale_price AS "salePrice",
+					a.user_id AS "user.id",
+					a.order_date AS "orderDate",
+					a.state AS "state",
+					a.state_date AS "stateDate",
+					a.cust_name AS "custName",
+					a.link_phone AS "linkPhone",
+					a.address AS "address",
+					a.pay_type AS "payType",
+					a.logist_id AS "logistId",
+					a.logist_comp AS "logistComp",
+					a.checkin_code AS "checkinCode",
+					a.create_date AS "createDate",
+					a.reserve_id AS "reserveId",
+					a.remark AS "remark",
+		user.name AS "user.name"
+	</sql>
+
+	<sql id="tfTicketColumnsList">
+					a.ticket_id AS "id",
+					a.ticket_no AS "ticketNo",
+					a.goods_no AS "goodsNo",
+					a.goods_item_id AS "goodsItemId",
+					a.goods_item_name AS "goodsItemName",
+					a.goods_num AS "goodsNum",
+					a.price AS "price",
+					a.sale_price AS "salePrice",
+					a.user_id AS "user.id",
+					a.order_date AS "orderDate",
+					a.state AS "state",
+					a.state_date AS "stateDate",
+					a.cust_name AS "custName",
+					a.link_phone AS "linkPhone",
+					a.address AS "address",
+					a.pay_type AS "payType",
+					a.logist_id AS "logistId",
+					a.logist_comp AS "logistComp",
+					a.checkin_code AS "checkinCode",
+					a.create_date AS "createDate",
+					a.reserve_id AS "reserveId",
+					a.remark AS "remark",
+		user.name AS "user.name"
+	</sql>
+
+	<sql id="tfTicketJoins">
+		LEFT JOIN sys_user user ON user.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="TfTicket">
+		SELECT 
+			<include refid="tfTicketColumns"/>
+		FROM tf_ticket a
+		<include refid="tfTicketJoins"/>
+		WHERE a.ticket_id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TfTicket">
+		SELECT 
+			<include refid="tfTicketColumnsList"/>
+		FROM tf_ticket a
+		<include refid="tfTicketJoins"/>
+		<where>
+			
+			<if test="id != null and id != ''">
+				AND a.ticket_id = #{id}
+			</if>
+			<if test="ticketNo != null and ticketNo != ''">
+				AND a.ticket_no = #{ticketNo}
+			</if>
+			<if test="goodsNo != null and goodsNo != ''">
+				AND a.goods_no = #{goodsNo}
+			</if>
+			<if test="goodsItemId != null and goodsItemId != ''">
+				AND a.goods_item_id = #{goodsItemId}
+			</if>
+			<if test="goodsItemName != null and goodsItemName != ''">
+				AND a.goods_item_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{goodsItemName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{goodsItemName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{goodsItemName},'%')</if>
+			</if>
+			<if test="goodsNum != null and goodsNum != ''">
+				AND a.goods_num = #{goodsNum}
+			</if>
+			<if test="price != null and price != ''">
+				AND a.price = #{price}
+			</if>
+			<if test="salePrice != null and salePrice != ''">
+				AND a.sale_price = #{salePrice}
+			</if>
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.user_id = #{user.id}
+			</if>
+			<if test="beginOrderDate != null and endOrderDate != null ">
+				AND a.order_date BETWEEN #{beginOrderDate} AND #{endOrderDate}
+			</if>
+			<if test="state != null and state != ''">
+				AND a.state = #{state}
+			</if>
+			<if test="beginStateDate != null and endStateDate != null ">
+				AND a.state_date BETWEEN #{beginStateDate} AND #{endStateDate}
+			</if>
+			<if test="custName != null and custName != ''">
+				AND a.cust_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{custName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{custName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{custName},'%')</if>
+			</if>
+			<if test="linkPhone != null and linkPhone != ''">
+				AND a.link_phone = #{linkPhone}
+			</if>
+			<if test="address != null and address != ''">
+				AND a.address = #{address}
+			</if>
+			<if test="payType != null and payType != ''">
+				AND a.pay_type = #{payType}
+			</if>
+			<if test="logistId != null and logistId != ''">
+				AND a.logist_id = #{logistId}
+			</if>
+			<if test="logistComp != null and logistComp != ''">
+				AND a.logist_comp = #{logistComp}
+			</if>
+			<if test="checkinCode != null and checkinCode != ''">
+				AND a.checkin_code = #{checkinCode}
+			</if>
+			<if test="reserveId != null and reserveId != ''">
+				AND a.reserve_id = #{reserveId}
+			</if>
+			<if test="remark != null and remark != ''">
+				AND a.remark = #{remark}
+			</if>
+		</where>
+		<choose>
+			<when test="where !=null and where != ''">
+				AND ${where}
+			</when>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TfTicket">
+		SELECT 
+			<include refid="tfTicketColumnsList"/>
+		FROM tf_ticket a
+		<include refid="tfTicketJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		<selectKey keyProperty="id" resultType="String">
+			select LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO tf_ticket(
+			ticket_no,
+			goods_no,
+			goods_item_id,
+			goods_item_name,
+			goods_num,
+			price,
+			sale_price,
+			user_id,
+			order_date,
+			state,
+			state_date,
+			cust_name,
+			link_phone,
+			address,
+			pay_type,
+			logist_id,
+			logist_comp,
+			checkin_code,
+			create_date,
+			reserve_id,
+			remark
+		) VALUES (
+			#{ticketNo},
+			#{goodsNo},
+			#{goodsItemId},
+			#{goodsItemName},
+			#{goodsNum},
+			#{price},
+			#{salePrice},
+			#{user.id},
+			#{orderDate},
+			#{state},
+			#{stateDate},
+			#{custName},
+			#{linkPhone},
+			#{address},
+			#{payType},
+			#{logistId},
+			#{logistComp},
+			#{checkinCode},
+			#{createDate},
+			#{reserveId},
+			#{remark}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE tf_ticket SET 	
+			ticket_id = #{id},
+			ticket_no = #{ticketNo},
+			goods_no = #{goodsNo},
+			goods_item_id = #{goodsItemId},
+			goods_item_name = #{goodsItemName},
+			goods_num = #{goodsNum},
+			price = #{price},
+			sale_price = #{salePrice},
+			user_id = #{user.id},
+			order_date = #{orderDate},
+			state = #{state},
+			state_date = #{stateDate},
+			cust_name = #{custName},
+			link_phone = #{linkPhone},
+			address = #{address},
+			pay_type = #{payType},
+			checkin_code = #{checkinCode},
+			reserve_id = #{reserveId},
+			remark = #{remark}
+		WHERE ticket_id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM tf_ticket
+		WHERE ticket_id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE tf_ticket SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE ticket_id = #{id}
+	</update>
+
+	<select id="findUniqueByProperty" resultType="TfTicket" statementType="STATEMENT">
+		select * FROM tf_ticket  where ${propertyName} = '${value}'
+	</select>
+
+	<select id="total" resultType="TfTicket">
+		SELECT
+			sum(a.goods_num) as sumGoodsNum,
+			sum(a.price) as sumPrice,
+			sum(a.sale_price) as sumSalePrice,
+			<choose>
+				<when test=" totalType != null and totalType != ''">
+					DATE_FORMAT(a.create_date,'${totalType}') as totalDate,
+				</when>
+				<otherwise>
+				 </otherwise>
+			</choose>
+			count(*) as totalCount
+		FROM
+			tf_ticket a
+		<where>
+			1=1
+			
+			<if test="id != null and id != ''">
+				AND a.ticket_id = #{id}
+			</if>
+			<if test="ticketNo != null and ticketNo != ''">
+				AND a.ticket_no = #{ticketNo}
+			</if>
+			<if test="goodsNo != null and goodsNo != ''">
+				AND a.goods_no = #{goodsNo}
+			</if>
+			<if test="goodsItemId != null and goodsItemId != ''">
+				AND a.goods_item_id = #{goodsItemId}
+			</if>
+			<if test="goodsItemName != null and goodsItemName != ''">
+				AND a.goods_item_name LIKE
+					<if test="dbName == 'oracle'">'%'||#{goodsItemName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{goodsItemName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{goodsItemName},'%')</if>
+			</if>
+			<if test="goodsNum != null and goodsNum != ''">
+				AND a.goods_num = #{goodsNum}
+			</if>
+			<if test="price != null and price != ''">
+				AND a.price = #{price}
+			</if>
+			<if test="salePrice != null and salePrice != ''">
+				AND a.sale_price = #{salePrice}
+			</if>
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.user_id = #{user.id}
+			</if>
+			<if test="beginOrderDate != null and endOrderDate != null ">
+				AND a.order_date BETWEEN #{beginOrderDate} AND #{endOrderDate}
+			</if>
+			<if test="state != null and state != ''">
+				AND a.state = #{state}
+			</if>
+			<if test="beginStateDate != null and endStateDate != null ">
+				AND a.state_date BETWEEN #{beginStateDate} AND #{endStateDate}
+			</if>
+			<if test="custName != null and custName != ''">
+				AND a.cust_name LIKE
+					<if test="dbName == 'oracle'">'%'||#{custName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{custName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{custName},'%')</if>
+			</if>
+			<if test="linkPhone != null and linkPhone != ''">
+				AND a.link_phone = #{linkPhone}
+			</if>
+			<if test="address != null and address != ''">
+				AND a.address = #{address}
+			</if>
+			<if test="payType != null and payType != ''">
+				AND a.pay_type = #{payType}
+			</if>
+			<if test="logistId != null and logistId != ''">
+				AND a.logist_id = #{logistId}
+			</if>
+			<if test="logistComp != null and logistComp != ''">
+				AND a.logist_comp = #{logistComp}
+			</if>
+			<if test="checkinCode != null and checkinCode != ''">
+				AND a.checkin_code = #{checkinCode}
+			</if>
+			<if test="reserveId != null and reserveId != ''">
+				AND a.reserve_id = #{reserveId}
+			</if>
+			<if test="remark != null and remark != ''">
+				AND a.remark = #{remark}
+			</if>
+		</where>
+		<choose>
+			<when test=" groupBy != null and groupBy != '' and totalType != null and totalType != '' ">
+				GROUP BY DATE_FORMAT(a.create_date,'${totalType}'),${groupBy}
+			</when>
+			<when test=" groupBy != null and groupBy != ''">
+				GROUP BY ${groupBy}
+			</when>
+			<when test=" totalType != null and totalType != ''">
+				GROUP BY DATE_FORMAT(a.create_date,'${totalType}')
+			</when>
+			<otherwise>
+			 </otherwise>
+		</choose>
+		<choose>
+			<when test=" orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+</mapper>

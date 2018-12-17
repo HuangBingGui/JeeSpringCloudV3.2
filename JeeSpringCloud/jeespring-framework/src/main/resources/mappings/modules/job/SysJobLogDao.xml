@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeespring.modules.job.dao.SysJobLogDao">
+    
+	<sql id="sysJobLogColumns">
+					a.job_log_id AS "id",
+					a.job_name AS "jobName",
+					a.job_group AS "jobGroup",
+					a.method_name AS "methodName",
+					a.method_params AS "methodParams",
+					a.job_message AS "jobMessage",
+					a.status AS "status",
+					a.exception_info AS "exceptionInfo",
+					a.create_date AS "createDate",
+					a.create_by AS "createBy",
+					a.update_date AS "updateDate",
+					a.update_by AS "updateBy",
+					a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="sysJobLogColumnsList">
+					a.job_log_id AS "id",
+					a.job_name AS "jobName",
+					a.job_group AS "jobGroup",
+					a.method_name AS "methodName",
+					a.method_params AS "methodParams",
+					a.job_message AS "jobMessage",
+					a.status AS "status",
+					substr(a.exception_info,1,30) AS "exceptionInfo",
+					a.create_date AS "createDate",
+					a.create_by AS "createBy",
+					a.update_date AS "updateDate",
+					a.update_by AS "updateBy",
+					a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="sysJobLogJoins">
+	</sql>
+    
+	<select id="get" resultType="SysJobLog">
+		SELECT 
+			<include refid="sysJobLogColumns"/>
+		FROM sys_job_log a
+		<include refid="sysJobLogJoins"/>
+		WHERE a.job_log_id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SysJobLog">
+		SELECT 
+			<include refid="sysJobLogColumnsList"/>
+		FROM sys_job_log a
+		<include refid="sysJobLogJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="id != null and id != ''">
+				AND a.job_log_id = #{id}
+			</if>
+			<if test="jobName != null and jobName != ''">
+				AND a.job_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{jobName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{jobName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{jobName},'%')</if>
+			</if>
+			<if test="jobGroup != null and jobGroup != ''">
+				AND a.job_group = #{jobGroup}
+			</if>
+			<if test="methodName != null and methodName != ''">
+				AND a.method_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{methodName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{methodName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{methodName},'%')</if>
+			</if>
+			<if test="methodParams != null and methodParams != ''">
+				AND a.method_params = #{methodParams}
+			</if>
+			<if test="jobMessage != null and jobMessage != ''">
+				AND a.job_message = #{jobMessage}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="exceptionInfo != null and exceptionInfo != ''">
+				AND a.exception_info LIKE 
+					<if test="dbName == 'oracle'">'%'||#{exceptionInfo}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{exceptionInfo}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{exceptionInfo},'%')</if>
+			</if>
+			<if test="beginCreateDate != null and endCreateDate != null ">
+				AND a.create_date BETWEEN #{beginCreateDate} AND #{endCreateDate}
+			</if>
+			<if test="createBy != null and createBy != ''">
+				AND a.create_by = #{createBy}
+			</if>
+			<if test="updateBy != null and updateBy != ''">
+				AND a.update_by = #{updateBy}
+			</if>
+			<if test="delFlag != null and delFlag != ''">
+				AND a.del_flag = #{delFlag}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SysJobLog">
+		SELECT 
+			<include refid="sysJobLogColumnsList"/>
+		FROM sys_job_log a
+		<include refid="sysJobLogJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		<selectKey keyProperty="id" resultType="String">
+			select LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO sys_job_log(
+			job_name,
+			job_group,
+			method_name,
+			method_params,
+			job_message,
+			status,
+			exception_info,
+			create_date,
+			create_by,
+			update_date,
+			update_by,
+			del_flag
+		) VALUES (
+			#{jobName},
+			#{jobGroup},
+			#{methodName},
+			#{methodParams},
+			#{jobMessage},
+			#{status},
+			#{exceptionInfo},
+			#{createDate},
+			#{createBy},
+			#{updateDate},
+			#{updateBy},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_job_log SET 	
+			job_log_id = #{id},
+			job_name = #{jobName},
+			job_group = #{jobGroup},
+			method_name = #{methodName},
+			method_params = #{methodParams},
+			job_message = #{jobMessage},
+			status = #{status},
+			exception_info = #{exceptionInfo},
+			create_date = #{createDate},
+			create_by = #{createBy},
+			update_date = #{updateDate},
+			update_by = #{updateBy},
+			del_flag = #{delFlag}
+		WHERE job_log_id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM sys_job_log
+		WHERE job_log_id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE sys_job_log SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE job_log_id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="SysJobLog" statementType="STATEMENT">
+		select * FROM sys_job_log  where ${propertyName} = '${value}'
+	</select>
+
+	<select id="total" resultType="SysJobLog">
+		SELECT
+			<choose>
+				<when test=" totalType != null and totalType != ''">
+					DATE_FORMAT(a.create_date,'${totalType}') as totalDate,
+				</when>
+				<otherwise>
+				 </otherwise>
+			</choose>
+			count(*) as totalCount
+		FROM
+			sys_job_log a
+		<where>
+			1=1
+			and a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="id != null and id != ''">
+				AND a.job_log_id = #{id}
+			</if>
+			<if test="jobName != null and jobName != ''">
+				AND a.job_name LIKE
+					<if test="dbName == 'oracle'">'%'||#{jobName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{jobName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{jobName},'%')</if>
+			</if>
+			<if test="jobGroup != null and jobGroup != ''">
+				AND a.job_group = #{jobGroup}
+			</if>
+			<if test="methodName != null and methodName != ''">
+				AND a.method_name LIKE
+					<if test="dbName == 'oracle'">'%'||#{methodName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{methodName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{methodName},'%')</if>
+			</if>
+			<if test="methodParams != null and methodParams != ''">
+				AND a.method_params = #{methodParams}
+			</if>
+			<if test="jobMessage != null and jobMessage != ''">
+				AND a.job_message = #{jobMessage}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="exceptionInfo != null and exceptionInfo != ''">
+				AND a.exception_info LIKE
+					<if test="dbName == 'oracle'">'%'||#{exceptionInfo}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{exceptionInfo}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{exceptionInfo},'%')</if>
+			</if>
+			<if test="beginCreateDate != null and endCreateDate != null ">
+				AND a.create_date BETWEEN #{beginCreateDate} AND #{endCreateDate}
+			</if>
+			<if test="createBy != null and createBy != ''">
+				AND a.create_by = #{createBy}
+			</if>
+			<if test="updateBy != null and updateBy != ''">
+				AND a.update_by = #{updateBy}
+			</if>
+			<if test="delFlag != null and delFlag != ''">
+				AND a.del_flag = #{delFlag}
+			</if>
+		</where>
+		<choose>
+			<when test=" groupBy != null and groupBy != '' and totalType != null and totalType != '' ">
+				GROUP BY DATE_FORMAT(a.create_date,'${totalType}'),${groupBy}
+			</when>
+			<when test=" groupBy != null and groupBy != ''">
+				GROUP BY ${groupBy}
+			</when>
+			<when test=" totalType != null and totalType != ''">
+				GROUP BY DATE_FORMAT(a.create_date,'${totalType}')
+			</when>
+			<otherwise>
+			 </otherwise>
+		</choose>
+		<choose>
+			<when test=" orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+</mapper>

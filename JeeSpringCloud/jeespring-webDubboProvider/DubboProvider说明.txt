@@ -1,0 +1,19 @@
+﻿使用dubbo功能时，才进行配置。
+
+1.开启dubbo provider和consumer注解
+服务层
+开启注解:@com.alibaba.dubbo.config.annotation.Service(interfaceClass = IXXXXService.class,version = "1.0.0", timeout = 60000)
+
+控制层
+开启注解:@Reference(version = "1.0.0")
+
+2.启动zookeeper
+
+3.启动dubbo provider(JeeSpring-webDubboProvider)
+
+4.启动dubbo consumer(JeeSpring-web)
+
+5.使用com.jeespring.modules.server模块测试。
+
+正式使用时，建议增加dubbo-Api模块，包含服务接口和实体类,供provider和consumer调用。
+

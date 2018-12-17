@@ -1,0 +1,234 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="/WEB-INF/views/include/taglib.jsp"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" style="width:100%; height:100%;">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+    <meta name="keywords" content="百度地图,百度地图API，百度地图自定义工具，百度地图所见即所得工具" />
+    <meta name="description" content="百度地图API自定义地图，帮助用户在可视化操作下生成百度地图" />
+    <title>百度地图API自定义地图</title>
+    <!--引用百度地图API-->
+    <style type="text/css">
+        html,body{margin:0;padding:0;}
+        .iw_poi_title {color:#CC5522;font-size:14px;font-weight:bold;overflow:hidden;padding-right:13px;white-space:nowrap}
+        .iw_poi_content {font:12px arial,sans-serif;overflow:visible;padding-top:4px;white-space:-moz-pre-wrap;word-wrap:break-word}
+        .BMapLabel {max-width: none;}
+    </style>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?key=&v=1.1&services=true"></script>
+    <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
+    <%@ include file="/WEB-INF/views/include/head.jsp"%>
+    <script src="/staticViews/modules/ylttrip//tfTicketTotal.js" type="text/javascript"></script>
+	<link href="/staticViews/modules/ylttrip//tfTicketTotal.css" rel="stylesheet" />
+</head>
+
+<body style="width: 100%; height: 100%;overflow: hidden">
+<div class="wrapper wrapper-content" style="padding: 0px 20px 0px 20px;">
+<div class="ibox">
+<!--查询条件-->
+<div class="row">
+<div class="col-sm-12"  style="z-index: 1000;background-color: white;">
+	<form:form id="searchForm" modelAttribute="tfTicket" action="${ctx}/ylttrip/tfTicket/totalMap" method="post" class="form-inline" style="display:none">
+	<div class="form-group">
+		<input id="run" type="checkbox" value="true" name="run" checked/>自动刷新
+		<form:select path="totalType"  class="form-control m-b">
+			<form:option value="" label=""/>
+			<form:options items="${fns:getDictList('total_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+		</form:select>
+		<span>订单编号：</span>
+		<form:input path="ticketNo" htmlEscape="false" maxlength="25"  class=" form-control input-sm"/>
+		<span>商品编号：</span>
+		<form:input path="goodsNo" htmlEscape="false" maxlength="25"  class=" form-control input-sm"/>
+		<span>种类编号：</span>
+		<form:input path="goodsItemId" htmlEscape="false" maxlength="255"  class=" form-control input-sm"/>
+		<span>种类名称：</span>
+		<form:input path="goodsItemName" htmlEscape="false" maxlength="255"  class=" form-control input-sm"/>
+		<span>商品数量：</span>
+		<form:input path="goodsNum" htmlEscape="false" maxlength="11"  class=" form-control input-sm"/>
+		<span>商品单价：</span>
+		<form:input path="price" htmlEscape="false"  class=" form-control input-sm"/>
+		<span>订单金额：</span>
+		<form:input path="salePrice" htmlEscape="false"  class=" form-control input-sm"/>
+		<span>下单人：</span>
+	<sys:treeselect id="user" name="user.id" value="${tfTicket.user.id}" labelName="user.name" labelValue="${tfTicket.user.name}"
+	title="用户" url="/sys/office/treeData?type=3" cssClass="form-control input-sm" allowClear="true" notAllowSelectParent="true"/>
+		<span>下单时间：</span>
+	<input id="beginOrderDate" name="beginOrderDate" type="text" maxlength="20" class="laydate-icon form-control layer-date input-sm"
+		   value="<fmt:formatDate value="${tfTicket.beginOrderDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"/> -
+	<input id="endOrderDate" name="endOrderDate" type="text" maxlength="20" class="laydate-icon form-control layer-date input-sm"
+		   value="<fmt:formatDate value="${tfTicket.endOrderDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"/>
+		<span>订单状态：</span>
+	<form:radiobuttons class="i-checks" path="state" items="${fns:getDictList('STATE')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+		<span>状态时间：</span>
+	<input id="beginStateDate" name="beginStateDate" type="text" maxlength="20" class="laydate-icon form-control layer-date input-sm"
+		   value="<fmt:formatDate value="${tfTicket.beginStateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"/> -
+	<input id="endStateDate" name="endStateDate" type="text" maxlength="20" class="laydate-icon form-control layer-date input-sm"
+		   value="<fmt:formatDate value="${tfTicket.endStateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"/>
+		<span>客户姓名：</span>
+		<form:input path="custName" htmlEscape="false" maxlength="50"  class=" form-control input-sm"/>
+		<span>联系电话：</span>
+		<form:input path="linkPhone" htmlEscape="false" maxlength="50"  class=" form-control input-sm"/>
+		<span>付款方式：</span>
+	<form:radiobuttons class="i-checks" path="payType" items="${fns:getDictList('PAY_TYPE')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+		</div>
+		</form:form>
+<br/>
+		</div>
+		</div>
+
+			<!-- 工具栏 -->
+	<div class="row">
+		<div class="col-sm-12"  style="z-index: 1000;background-color: white;">
+			<div class="pull-left">
+					<button  class="btn btn-success btn-sm " onclick="$('#searchForm').toggle();$('.fa-chevron').toggle();"  title="检索">
+						<i class="fa-chevron fa fa-chevron-up"></i><i class="fa-chevron fa fa-chevron-down" style="display:none"></i> 检索
+					</button>
+					<button  class="btn btn-success btn-sm " onclick="search()" ><i class="fa fa-search"></i> 查询</button>
+			</div>
+			<div class="pull-right">
+				<div class="btn-group" title="其他">
+					<button class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" type="button" aria-expanded="false">
+						<i class="glyphicon glyphicon-th icon-th"></i>
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu" role="menu">
+						<li data-type="放大"><a href="javascript:void(0)" onclick="$('body').css({zoom:Number($('body').css('zoom'))+0.1});$('body .echartsEval script').each(function(){eval($(this).html())});">放大</a></li>
+						<li data-type="缩小"><a href="javascript:void(0)" onclick="$('body').css({zoom:$('body').css('zoom')-0.1});$('body .echartsEval script').each(function(){eval($(this).html())});">缩小</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+<!--查询条件-->
+</div>
+</div>
+
+<!--百度地图容器-->
+<div style="width:100%;height:100%;position: absolute; bottom: 0px;top: 0px;">
+<div style="width:100%;height:100%;border:#ccc solid 1px;" id="dituContent"></div>
+</div>
+</body>
+<script type="text/javascript">
+    //创建和初始化地图函数：
+    function initMap(){
+        createMap();//创建地图
+        setMapEvent();//设置地图事件
+        addMapControl();//向地图添加控件
+        addMarker();//向地图中添加marker
+    }
+
+    //创建地图函数：
+    function createMap(){
+        var map = new BMap.Map("dituContent");//在百度地图容器中创建一个地图
+        var point = new BMap.Point(113.271431,23.135336);//定义一个中心点坐标
+        map.centerAndZoom(point,13);//设定地图的中心点和坐标并将地图显示在地图容器中
+        window.map = map;//将map变量存储在全局
+    }
+
+    //地图事件设置函数：
+    function setMapEvent(){
+        map.enableDragging();//启用地图拖拽事件，默认启用(可不写)
+        map.enableScrollWheelZoom();//启用地图滚轮放大缩小
+        map.enableDoubleClickZoom();//启用鼠标双击放大，默认启用(可不写)
+        map.enableKeyboard();//启用键盘上下左右键移动地图
+    }
+
+    //地图控件添加函数：
+    function addMapControl(){
+        //向地图中添加缩放控件
+        var ctrl_nav = new BMap.NavigationControl({anchor:BMAP_ANCHOR_TOP_LEFT,type:BMAP_NAVIGATION_CONTROL_LARGE});
+        map.addControl(ctrl_nav);
+        //向地图中添加缩略图控件
+        var ctrl_ove = new BMap.OverviewMapControl({anchor:BMAP_ANCHOR_BOTTOM_RIGHT,isOpen:1});
+        map.addControl(ctrl_ove);
+        //向地图中添加比例尺控件
+        var ctrl_sca = new BMap.ScaleControl({anchor:BMAP_ANCHOR_BOTTOM_LEFT});
+        map.addControl(ctrl_sca);
+    }
+    //标注点数组
+    var markerArr = [
+<c:forEach items="${list}" var="tfTicket">
+        {title:"${tfTicket.totalDate}<br>统计${tfTicket.totalCount}次"
+		+";商品数量:${tfTicket.sumGoodsNum}"
+		+";商品单价:${tfTicket.sumPrice}"
+		+";订单金额:${tfTicket.sumSalePrice}"
+        ,content:""
+		+";合计商品数量:${tfTicket.sumGoodsNum}"
+		+";合计商品单价:${tfTicket.sumPrice}"
+		+";合计订单金额:${tfTicket.sumSalePrice}"
+        ,point:(113.271431+${tfTicket.totalCount})+"|"+(23.135336+${tfTicket.totalCount}),isOpen:0,icon:{w:21,h:21,l:0,t:0,x:6,lb:5}},
+</c:forEach>
+	{title:"订单<br>统计${sumTotalCount}次。"
+	+";商品数量:${sumGoodsNum}"
+	+";商品单价:${sumPrice}"
+	+";订单金额:${sumSalePrice}"
+	,content:""
+	+";合计商品数量:${sumGoodsNum}"
+	+";合计商品单价:${sumPrice}"
+	+";合计订单金额:${sumSalePrice}"
+	,point:"113.271431|23.135336",isOpen:0,icon:{w:21,h:21,l:0,t:0,x:6,lb:5}}
+    ];
+    //创建marker
+    function addMarker(){
+        for(var i=0;i<markerArr.length;i++){
+            var json = markerArr[i];
+            var p0 = json.point.split("|")[0];
+            var p1 = json.point.split("|")[1];
+            var point = new BMap.Point(p0,p1);
+            var iconImg = createIcon(json.icon);
+            var marker = new BMap.Marker(point,{icon:iconImg});
+            var iw = createInfoWindow(i);
+            var label = new BMap.Label(json.title,{"offset":new BMap.Size(json.icon.lb-json.icon.x+10,-20)});
+            label.setStyle({
+                width: "300px",
+                color: '#fff',
+                borderRadius: "5px",
+                textAlign: "center",
+                height: "50px",
+                lineHeight: "26px"
+            });
+            marker.setLabel(label);
+            map.addOverlay(marker);
+            label.setStyle({
+                borderColor:"#808080",
+                color:"#333",
+                cursor:"pointer"
+            });
+
+            (function(){
+                var index = i;
+                var _iw = createInfoWindow(i);
+                var _marker = marker;
+                _marker.addEventListener("click",function(){
+                    this.openInfoWindow(_iw);
+                });
+                _iw.addEventListener("open",function(){
+                    _marker.getLabel().hide();
+                })
+                _iw.addEventListener("close",function(){
+                    _marker.getLabel().show();
+                })
+                label.addEventListener("click",function(){
+                    _marker.openInfoWindow(_iw);
+                })
+                if(!!json.isOpen){
+                    label.hide();
+                    _marker.openInfoWindow(_iw);
+                }
+            })()
+        }
+    }
+    //创建InfoWindow
+    function createInfoWindow(i){
+        var json = markerArr[i];
+        var iw = new BMap.InfoWindow("<b class='iw_poi_title' title='" + json.title + "'>" + json.title + "</b><div class='iw_poi_content'>"+json.content+"</div>");
+        return iw;
+    }
+    //创建一个Icon
+    function createIcon(json){
+        var icon = new BMap.Icon("http://api.map.baidu.com/lbsapi/creatmap/images/us_cursor.gif", new BMap.Size(json.w,json.h),{imageOffset: new BMap.Size(-json.l,-json.t),infoWindowOffset:new BMap.Size(json.lb+5,1),offset:new BMap.Size(json.x,json.h)})
+        return icon;
+    }
+
+    initMap();//创建和初始化地图
+</script>
+</html>

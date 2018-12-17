@@ -1,0 +1,12 @@
+1.
+在JeeSpringDubboProvider项目内的
+provider端服务层
+开启注解:@com.alibaba.dubbo.config.annotation.Service(interfaceClass = IXXXXService.class,version = "1.0.0", timeout = 60000)
+在JeeSpringCloud项目内的
+consumer端控制层
+开启注解:@Reference(version = "1.0.0")
+2.application.yml(服务端和调用端的配置不一样)
+3.启动zookeeper
+4.启动dubbo provider
+5.启动dubbo consumer
+6.使用server模块测试。

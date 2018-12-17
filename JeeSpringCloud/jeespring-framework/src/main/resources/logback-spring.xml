@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+<configuration>
+	<include resource="org/springframework/boot/logging/logback/base.xml" />
+	<jmxConfigurator/>
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<!-- Log message format -->
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5level --- [%thread] %logger{36} : %msg%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+		<!-- deny all events with a level below DEBUG, that is TRACE  -->
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>DEBUG</level>
+		</filter>
+	</appender>
+	
+	<appender name="sysDailyRollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/data/jeespring/logs/sys.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<fileNamePattern>/data/jeespring/logs/sys-%d{yyyyMMdd}.log</fileNamePattern>
+			<!-- 保留30天的日志 -->
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5level --- [%thread] %logger{36} : %msg%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
+	</appender>
+	
+	<appender name="infoDailyRollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/data/jeespring/logs/jeespring-info.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<fileNamePattern>/data/jeespring/logs/jy-info-%d{yyyyMMdd}.log</fileNamePattern>
+			<!-- 保留30天的日志 -->
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5level --- [%thread] %logger{36} : %msg%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>INFO</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter> 
+	</appender>
+	
+	<appender name="severeDailyRollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/data/jeespring/logs/jeespring-severe.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<fileNamePattern>/data/jeespring/logs/jeespring-severe-%d{yyyyMMdd}.log</fileNamePattern>
+			<!-- 保留30天的日志 -->
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5level --- [%thread] %logger{36} : %msg%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+		<!-- deny all events with a level below WARN, that is TRACE, DEBUG, and INFO -->
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>WARN</level>
+		</filter> 
+	</appender>
+	
+	<logger name="com.jeespring" level="INFO">
+		<appender-ref ref="infoDailyRollingFile" />
+		<appender-ref ref="severeDailyRollingFile" />
+	</logger>
+
+	<!-- the root level of logging -->
+	<root level="INFO">
+		<appender-ref ref="sysDailyRollingFile" />
+	</root>
+</configuration>

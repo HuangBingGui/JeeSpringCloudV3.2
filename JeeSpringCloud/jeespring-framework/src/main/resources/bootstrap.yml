@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: jeespring-spring-boot
+  http:
+    encoding: { charset: UTF-8, enable: true, force: true }
+#产品信息设置
+productName: 智能服务云平台
+#产品版本
+version: jeespring-2.0
+#静态文件后缀
+web:
+  staticFile: .css,.js,.png,.jpg,.gif,.jpeg,.bmp,.ico,.swf,.psd,.htc,.htm,.html,.crx,.xpi,.exe,.ipa,.apk
+#演示模式: 不能操作和保存的模块： sys: area/office/user/role/menu/dict
+demoMode: false

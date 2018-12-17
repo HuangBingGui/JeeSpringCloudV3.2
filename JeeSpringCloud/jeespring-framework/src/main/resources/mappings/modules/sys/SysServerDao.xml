@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeespring.modules.server.dao.SysServerDao">
+    
+	<sql id="sysServerColumns">
+					a.id AS "id",
+					a.server_number AS "serverNumber",
+					a.server_address AS "serverAddress",
+					a.name AS "name",
+					a.label AS "label",
+					a.picture AS "picture",
+					a.type AS "type",
+					a.sort AS "sort",
+					a.description AS "description",
+					a.remarks AS "remarks",
+					a.html AS "html",
+					a.status AS "status",
+					a.create_by AS "createBy.id",
+					a.create_date AS "createDate",
+					a.update_by AS "updateBy.id",
+					a.update_date AS "updateDate",
+					a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="sysServerColumnsList">
+					a.id AS "id",
+					a.server_number AS "serverNumber",
+					a.server_address AS "serverAddress",
+					a.name AS "name",
+					a.label AS "label",
+					a.picture AS "picture",
+					a.type AS "type",
+					a.sort AS "sort",
+					a.description AS "description",
+					a.remarks AS "remarks",
+					substr(a.html,1,30) AS "html",
+					a.status AS "status",
+					a.create_by AS "createBy.id",
+					a.create_date AS "createDate",
+					a.update_by AS "updateBy.id",
+					a.update_date AS "updateDate",
+					a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="sysServerJoins">
+	</sql>
+    
+	<select id="get" resultType="SysServer">
+		SELECT 
+			<include refid="sysServerColumns"/>
+		FROM sys_server a
+		<include refid="sysServerJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SysServer">
+		SELECT 
+			<include refid="sysServerColumnsList"/>
+		FROM sys_server a
+		<include refid="sysServerJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="serverNumber != null and serverNumber != ''">
+				AND a.server_number = #{serverNumber}
+			</if>
+			<if test="serverAddress != null and serverAddress != ''">
+				AND a.server_address = #{serverAddress}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="label != null and label != ''">
+				AND a.label = #{label}
+			</if>
+			<if test="picture != null and picture != ''">
+				AND a.picture = #{picture}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="sort != null and sort != ''">
+				AND a.sort = #{sort}
+			</if>
+			<if test="description != null and description != ''">
+				AND a.description = #{description}
+			</if>
+			<if test="remarks != null and remarks != ''">
+				AND a.remarks LIKE 
+					<if test="dbName == 'oracle'">'%'||#{remarks}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{remarks}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{remarks},'%')</if>
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="createBy != null and createBy.id != null and createBy.id != ''">
+				AND a.create_by = #{createBy.id}
+			</if>
+			<if test="beginCreateDate != null and endCreateDate != null ">
+				AND a.create_date BETWEEN #{beginCreateDate} AND #{endCreateDate}
+			</if>
+			<if test="updateBy != null and updateBy.id != null and updateBy.id != ''">
+				AND a.update_by = #{updateBy.id}
+			</if>
+			<if test="beginUpdateDate != null and endUpdateDate != null ">
+				AND a.update_date BETWEEN #{beginUpdateDate} AND #{endUpdateDate}
+			</if>
+			<if test="delFlag != null and delFlag != ''">
+				AND a.del_flag = #{delFlag}
+			</if>
+		</where>
+		<choose>
+			<when test="where !=null and where != ''">
+				AND ${where}
+			</when>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SysServer">
+		SELECT 
+			<include refid="sysServerColumnsList"/>
+		FROM sys_server a
+		<include refid="sysServerJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sys_server(
+			id,
+			server_number,
+			server_address,
+			name,
+			label,
+			picture,
+			type,
+			sort,
+			description,
+			remarks,
+			html,
+			status,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag
+		) VALUES (
+			#{id},
+			#{serverNumber},
+			#{serverAddress},
+			#{name},
+			#{label},
+			#{picture},
+			#{type},
+			#{sort},
+			#{description},
+			#{remarks},
+			#{html},
+			#{status},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_server SET 	
+			server_number = #{serverNumber},
+			server_address = #{serverAddress},
+			name = #{name},
+			label = #{label},
+			picture = #{picture},
+			type = #{type},
+			sort = #{sort},
+			description = #{description},
+			remarks = #{remarks},
+			html = #{html},
+			status = #{status},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM sys_server
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE sys_server SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="SysServer" statementType="STATEMENT">
+		select * FROM sys_server  where ${propertyName} = '${value}'
+	</select>
+
+	<select id="total" resultType="SysServer">
+		SELECT
+			<choose>
+				<when test=" totalType != null and totalType != ''">
+					DATE_FORMAT(a.create_date,'${totalType}') as totalDate,
+				</when>
+				<otherwise>
+				 </otherwise>
+			</choose>
+			count(*) as totalCount
+		FROM
+			sys_server a
+		<where>
+			1=1
+			and a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="serverNumber != null and serverNumber != ''">
+				AND a.server_number = #{serverNumber}
+			</if>
+			<if test="serverAddress != null and serverAddress != ''">
+				AND a.server_address = #{serverAddress}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="label != null and label != ''">
+				AND a.label = #{label}
+			</if>
+			<if test="picture != null and picture != ''">
+				AND a.picture = #{picture}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="sort != null and sort != ''">
+				AND a.sort = #{sort}
+			</if>
+			<if test="description != null and description != ''">
+				AND a.description = #{description}
+			</if>
+			<if test="remarks != null and remarks != ''">
+				AND a.remarks LIKE
+					<if test="dbName == 'oracle'">'%'||#{remarks}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{remarks}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{remarks},'%')</if>
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="createBy != null and createBy.id != null and createBy.id != ''">
+				AND a.create_by = #{createBy.id}
+			</if>
+			<if test="beginCreateDate != null and endCreateDate != null ">
+				AND a.create_date BETWEEN #{beginCreateDate} AND #{endCreateDate}
+			</if>
+			<if test="updateBy != null and updateBy.id != null and updateBy.id != ''">
+				AND a.update_by = #{updateBy.id}
+			</if>
+			<if test="beginUpdateDate != null and endUpdateDate != null ">
+				AND a.update_date BETWEEN #{beginUpdateDate} AND #{endUpdateDate}
+			</if>
+			<if test="delFlag != null and delFlag != ''">
+				AND a.del_flag = #{delFlag}
+			</if>
+		</where>
+		<choose>
+			<when test=" groupBy != null and groupBy != '' and totalType != null and totalType != '' ">
+				GROUP BY DATE_FORMAT(a.create_date,'${totalType}'),${groupBy}
+			</when>
+			<when test=" groupBy != null and groupBy != ''">
+				GROUP BY ${groupBy}
+			</when>
+			<when test=" totalType != null and totalType != ''">
+				GROUP BY DATE_FORMAT(a.create_date,'${totalType}')
+			</when>
+			<otherwise>
+			 </otherwise>
+		</choose>
+		<choose>
+			<when test=" orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+</mapper>

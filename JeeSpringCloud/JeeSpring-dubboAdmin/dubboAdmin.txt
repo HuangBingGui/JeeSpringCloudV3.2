@@ -1,0 +1,17 @@
+﻿1、官网下载dubbo源码
+
+https://github.com/alibaba/dubbo
+
+2、编译dubbo-admin工程，打成war包     dubbo-admin-2.5.8.war
+
+3、进入 WEB-INF 目录修改文件 dubbo.properties 
+
+dubbo.registry.address=zookeeper://127.0.0.1:2181
+dubbo.admin.root.password=root
+dubbo.admin.guest.password=guest
+4、在tomcat 中部署dubbo-admin-2.5.8.war
+
+5、用户密码都root/root
+
+
+

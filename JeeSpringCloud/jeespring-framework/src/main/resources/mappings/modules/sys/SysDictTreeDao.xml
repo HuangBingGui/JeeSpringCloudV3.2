@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeespring.modules.sys.dao.SysDictTreeDao">
+    
+	<sql id="sysDictColumns">
+		a.id AS "id",
+		a.value AS "value",
+		a.label AS "label",
+		a.label AS "name",
+		a.type AS "type",
+		a.description AS "description",
+		a.sort AS "sort",
+		a.parent_id AS "parent.id",
+		a.parent_ids AS "parentIds",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.picture AS "picture"
+	</sql>
+	
+	<sql id="sysDictJoins">
+	</sql>
+    
+	<select id="get" resultType="SysDictTree">
+		SELECT 
+			<include refid="sysDictColumns"/>
+		FROM sys_dict a
+		<include refid="sysDictJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SysDictTree">
+		SELECT 
+			<include refid="sysDictColumns"/>
+		FROM sys_dict a
+		<include refid="sysDictJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="value != null and value != ''">
+				AND a.value = #{value}
+			</if>
+			<if test="label != null and label != ''">
+				AND a.label = #{label}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="description != null and description != ''">
+				AND a.description = #{description}
+			</if>
+			<if test="parent != null and parent.id != null and parent.id != ''">
+				AND a.parent_id = #{parent.id}
+			</if>
+			<if test="parentIds != null and parentIds != ''">
+				AND a.parent_ids LIKE 
+					<if test="dbName == 'oracle'">'%'||#{parentIds}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{parentIds}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{parentIds},'%')</if>
+			</if>
+			<if test="createBy != null and createBy.id != null and createBy.id != ''">
+				AND a.create_by = #{createBy.id}
+			</if>
+			<if test="beginCreateDate != null and endCreateDate != null and beginCreateDate != '' and endCreateDate != ''">
+				AND a.create_date BETWEEN #{beginCreateDate} AND #{endCreateDate}
+			</if>
+			<if test="updateBy != null and updateBy.id != null and updateBy.id != ''">
+				AND a.update_by = #{updateBy.id}
+			</if>
+			<if test="beginUpdateDate != null and endUpdateDate != null and beginUpdateDate != '' and endUpdateDate != ''">
+				AND a.update_date BETWEEN #{beginUpdateDate} AND #{endUpdateDate}
+			</if>
+			<if test="remarks != null and remarks != ''">
+				AND a.remarks LIKE 
+					<if test="dbName == 'oracle'">'%'||#{remarks}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{remarks}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{remarks},'%')</if>
+			</if>
+			<if test="delFlag != null and delFlag != ''">
+				AND a.del_flag = #{delFlag}
+			</if>
+			<if test="where !=null and where != ''">
+				AND ${where}
+			</if>
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+	
+	<select id="findAllList" resultType="SysDictTree">
+		SELECT 
+			<include refid="sysDictColumns"/>
+		FROM sys_dict a
+		<include refid="sysDictJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+	
+	<select id="findByParentIdsLike" resultType="SysDictTree">
+		SELECT
+			a.id,
+			a.parent_id AS "parent.id",
+			a.parent_ids
+		FROM sys_dict a
+		<include refid="sysDictJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.parent_ids LIKE #{parentIds}
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sys_dict(
+			id,
+			value,
+			label,
+			type,
+			description,
+			sort,
+			parent_id,
+			parent_ids,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			picture
+		) VALUES (
+			#{id},
+			#{value},
+			#{label},
+			#{type},
+			#{description},
+			#{sort},
+			#{parent.id},
+			#{parentIds},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{picture}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_dict SET 	
+			value = #{value},
+			label = #{label},
+			type = #{type},
+			description = #{description},
+			sort = #{sort},
+			parent_id = #{parent.id},
+			parent_ids = #{parentIds},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			picture = #{picture}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateParentIds">
+		UPDATE sys_dict SET 
+			parent_id = #{parent.id}, 
+			parent_ids = #{parentIds}
+		WHERE id = #{id}
+	</update>
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM sys_dict
+		WHERE id = #{id} OR parent_ids LIKE
+		<if test="dbName == 'oracle'">'%'||#{id}||'%'</if>
+		<if test="dbName == 'mssql'">'%'+#{id}+'%'</if>
+		<if test="dbName == 'mysql'">concat('%',#{id},'%')</if>
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE sys_dict SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id} OR parent_ids LIKE
+		<if test="dbName == 'oracle'">'%'||#{id}||'%'</if>
+		<if test="dbName == 'mssql'">'%'+#{id}+'%'</if>
+		<if test="dbName == 'mysql'">concat('%',#{id},'%')</if>
+	</update>
+	
+</mapper>

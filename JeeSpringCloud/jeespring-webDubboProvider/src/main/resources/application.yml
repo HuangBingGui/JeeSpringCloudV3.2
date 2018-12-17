@@ -1,0 +1,197 @@
+server:
+  port: 8888
+  tomcat:
+    uri-encoding: UTF-8
+    basedir: /data/jeespring/tomcat
+    max-threads: 2000
+    min-spare-threads: 10
+    accesslog:
+      pattern: common
+      enabled: true
+      directory: ../logs
+      prefix: jeespring_access_log
+      suffix: .log
+      request-attributes-enabled: true
+      rename-on-rotate: true
+  #启动热部署
+  jsp-servlet.init-parameters.development: true
+logging:
+  level:
+    root: INFO
+    #WARN、DEBUG、INFO;DEBUG: 设置为DEBUG会打印SQL语句
+    com.jeespring: WARN
+    com.jeespring.modules.cms: DEBUG
+    com.company: DEBUG
+    org.apache.shiro.cache.ehcache.EhCacheManager: WARN
+#如果不需要启用安全验证 spring boot admin
+management:
+  security:
+    #enabled: false
+info: #定义各种额外的详情给服务端显示
+  app:
+    name: "@project.name@" #从pom.xml中获取
+    description: "@project.description@"
+    version: "@project.version@"
+    spring-boot-version: "@project.parent.version@"
+spring:
+#dubbo的消费者和提供者配置，默认为消费者dubboConsumer。如果要启用提供者，请配置为dubboProvider。
+  #profiles:
+    #active: dubboConsumer
+  application:
+    name: jeeSpring
+  #spring boot admin
+  boot:
+    admin:
+      #client:
+        #prefer-ip: true # 解决windows下运行时无法识别主机名的问题
+      #url: http://localhost:8999
+  #数据库的配置
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    #mysql
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/jeespring?useUnicode=true&characterEncoding=utf-8
+    #oracle
+    #driverClassName: oracle.jdbc.driver.OracleDriver
+    #jdbc:oracle:thin:@127.0.0.1:1521:orcl
+    username: root
+    password: root
+    # 下面为连接池的补充设置，应用到上面所有数据源中
+    # 初始化大小，最小，最大
+    initialSize: 5
+    minIdle: 3
+    maxActive: 20
+    # 配置获取连接等待超时的时间
+    maxWait: 60000
+    # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+    timeBetweenEvictionRunsMillis: 60000
+    # 配置一个连接在池中最小生存的时间，单位是毫秒
+    minEvictableIdleTimeMillis: 30000
+    validationQuery: SELECT 'x' FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    # 打开PSCache，并且指定每个连接上PSCache的大小
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+    filters: stat,wall,slf4j
+    # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    # 合并多个DruidDataSource的监控数据
+    useGlobalDataSourceStat: true
+      
+#springMvc的配置
+  mvc:
+     view:
+       prefix: /WEB-INF/views/
+       suffix: .jsp
+     servlet:
+       load-on-startup: 1      
+#spring-ehcache的配置
+  cache:
+    type: ehcache
+    ehcache:
+      config: classpath:ehcache.xml
+#spring-redis的配置
+  redis:
+    hostName: 127.0.0.1
+    port: 6379
+    password: 123456
+    pool:
+      maxActive: 8
+      maxWait: -1
+      maxIdle: 8
+      minIdle: 0
+    timeout: 0
+    keyPrefix: JeeSpring_  #Redis key 前缀
+    run: true  #Redis是否启动
+    listFlush: true   #list记录根据添加修改删除自动清除
+    expireTime: 900     #缓存有效时间15分钟
+    expireTimeShiro: 1800     #缓存有效时间30分钟
+  ######################################### 使用activemq队列是,取消下面注解
+  activemq:
+    broker-url: tcp://localhost:61616
+    in-memory: true # Specify if the default broker URL should be in memory. Ignored if an explicit broker has been specified.
+    password: admin  # Login password of the broker.
+    user: admin  # Login user of the broker.
+    packages:
+      trust-all: true # Trust all packages.
+      trusted:  # Comma-separated list of specific packages to trust (when not trusting all packages).
+    pool:
+      configuration.*:  # See PooledConnectionFactory.
+      enabled: true # Whether a PooledConnectionFactory should be created instead of a regular ConnectionFactory.
+      expiry-timeout: 0 # Connection expiration timeout in milliseconds.
+      idle-timeout: 30000 # Connection idle timeout in milliseconds.
+      max-connections: 1 # Maximum number of pooled connections.
+#mybatis的配置
+mybatis:
+  config-location: classpath:/mybatis-config.xml
+  mapper-locations: classpath*:/mappings/**/*.xml
+  type-aliases-package: com.jeespring,com.company
+#admin页面管理Path
+adminPath: /admin
+frontPath: /cms
+urlSuffix: .html
+#分页配置
+page:
+  pageSize: 10
+#文件上传的路径
+userfiles:
+  basedir: /data/jeespring/upload
+#系统发生邮件服务账号密码
+email:
+  from: 516821420@qq.com
+  fromName: jeespring
+  username: 516821420@qq.com
+  password: nxpnalicxljjcaec
+demoMode: false
+demoModeDescription: 演示版启用，为系统能正常演示，暂时不允许操作！系统配置可开启正式版！功能全开源！每周周一再更新！
+# Shiro权限配置
+shiro:
+  redis: false #启动shiro redis缓存，单点登录,##单点登录性能有带提升##
+  user:
+    # 登录地址
+    loginUrl: /admin/login
+    # 权限认证失败地址
+    unauthorizedUrl: /admin/login
+  cookie:
+    # 设置Cookie的域名 默认空，即当前访问的域名
+    domain:
+    # 设置cookie的有效访问路径
+    path: /
+    # 设置HttpOnly属性
+    httpOnly: true
+    # 设置Cookie的过期时间，天为单位
+    maxAge: 30
+  session:
+    # Session超时时间（默认30分钟）
+    expireTime: 30
+    # 同步session到数据库的周期（默认1分钟）
+    dbSyncPeriod: 1
+    # 相隔多久检查一次session的有效性，默认就是10分钟
+    validationInterval: 10
+#dubbo客户端,使用dubbo时,请启动zookeeper
+#dubbo:
+#  application:
+#    name: consumer
+#  registry:
+#    address: zookeeper://127.0.0.1:2181
+#  scan:
+#    base-packages: com.jeespring.modules.server.web
+#  run: true
+#dubbo服务端
+#dubbo:
+  application:
+    name: provider
+  registry:
+    address: zookeeper://127.0.0.1:2181
+  protocol:
+    name: dubbo
+    port: 20880
+  scan:
+    base-packages: com.jeespring.modules.server.service
+  run: true
+security:
+  basic:
+    enabled: false

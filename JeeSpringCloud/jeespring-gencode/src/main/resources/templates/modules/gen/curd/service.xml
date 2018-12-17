@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<name>service</name>
+	<filePath>src/main/java/${packageName}/${moduleName}/service/${subModuleName}</filePath>
+	<fileName>${ClassName}Service.java</fileName>
+	<content><![CDATA[
+/**
+ * * Copyright &copy; 2015-2020 <a href="https://gitee.com/JeeHuangBingGui/jeeSpringCloud">JeeSpringCloud</a> All rights reserved..
+ */
+package ${packageName}.${moduleName}.service<#if subModuleName != "">.${subModuleName}</#if>;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.jeespring.common.persistence.Page;
+import com.jeespring.common.service.AbstractBaseService;
+import ${packageName}.${moduleName}.entity<#if subModuleName != "">.${subModuleName}</#if>.${ClassName};
+import ${packageName}.${moduleName}.dao<#if subModuleName != "">.${subModuleName}</#if>.${ClassName}Dao;
+import ${packageName}.${moduleName}.service<#if subModuleName != "">.${subModuleName}</#if>.I${ClassName}Service;
+import com.alibaba.fastjson.JSON;
+import com.jeespring.common.redis.RedisUtils;
+import com.jeespring.common.security.MD5Tools;
+//import com.alibaba.dubbo.config.annotation.Service;
+import com.jeespring.common.config.Global;
+
+/**
+ * ${functionName}Service
+ * @author ${functionAuthor}
+ * @version ${functionVersion}
+ */
+ //启用dubbo服务器时，要去掉下面注解
+ //com.alibaba.dubbo.config.annotation.Service(interfaceClass = ISysServerService.class,version = "1.0.0", timeout = 60000)
+@org.springframework.stereotype.Service
+@Transactional(readOnly = true)
+public class ${ClassName}Service extends AbstractBaseService<${ClassName}Dao, ${ClassName}> implements I${ClassName}Service{
+
+	/**
+	 * redis caches
+	 */
+	@Autowired
+	private RedisUtils redisUtils;
+
+	public ${ClassName} get(String id) {
+		//获取数据库数据
+		${ClassName}  ${className}=super.get(id);
+		return ${className};
+	}
+
+	public ${ClassName} getCache(String id) {
+		//获取缓存数据
+		${ClassName} ${className}=(${ClassName})redisUtils.get(RedisUtils.getIdKey(${ClassName}Service.class.getName(),id));
+		if( ${className}!=null) return  ${className};
+		//获取数据库数据
+		${className}=super.get(id);
+		//设置缓存数据
+		redisUtils.set(RedisUtils.getIdKey(${ClassName}Service.class.getName(),id),${className});
+		return ${className};
+	}
+
+	public List<${ClassName}> total(${ClassName} ${className}) {
+		//获取数据库数据
+		List<${ClassName}> ${className}List=super.total(${className});
+		return ${className}List;
+	}
+
+	public List<${ClassName}> totalCache(${ClassName} ${className}) {
+		//获取缓存数据
+		String totalKey = RedisUtils.getTotalKey(${ClassName}Service.class.getName(),JSON.toJSONString(${className}));
+		List<${ClassName}> ${className}List=(List<${ClassName}>)redisUtils.get(totalKey);
+		if(${className}List!=null) return ${className}List;
+		//获取数据库数据
+		${className}List=super.total(${className});
+		//设置缓存数据
+		redisUtils.set(totalKey,${className}List);
+		return ${className}List;
+	}
+
+	public List<${ClassName}> findList(${ClassName} ${className}) {
+		//获取数据库数据
+		List<${ClassName}> ${className}List=super.findList(${className});
+		//设置缓存数据
+		return ${className}List;
+	}
+
+	public List<${ClassName}> findListCache(${ClassName} ${className}) {
+		//获取缓存数据
+		String findListKey = RedisUtils.getFindListKey(${ClassName}Service.class.getName(),JSON.toJSONString(${className}));
+		List<${ClassName}> ${className}List=(List<${ClassName}>)redisUtils.get(findListKey);
+		if(${className}List!=null) return ${className}List;
+		//获取数据库数据
+		${className}List=super.findList(${className});
+		//设置缓存数据
+		redisUtils.set(findListKey,${className}List);
+		return ${className}List;
+	}
+
+	public ${ClassName} findListFirst(${ClassName} ${className}) {;
+		//获取数据库数据
+		List<${ClassName}> ${className}List=super.findList(${className});
+		if(${className}List.size()>0) ${className}=${className}List.get(0);
+		return ${className};
+	}
+
+	public ${ClassName} findListFirstCache(${ClassName} ${className}) {
+		//获取缓存数据
+		String findListFirstKey = RedisUtils.getFindListFirstKey(${ClassName}Service.class.getName(),JSON.toJSONString(${className}));
+		${ClassName} ${className}Redis=(${ClassName})redisUtils.get(findListFirstKey);
+		if(${className}Redis!=null) return ${className}Redis;
+		//获取数据库数据
+		List<${ClassName}> ${className}List=super.findList(${className});
+		if(${className}List.size()>0) ${className}=${className}List.get(0);
+		else ${className}=new ${ClassName}();
+		//设置缓存数据
+		redisUtils.set(findListFirstKey,${className});
+		return ${className};
+	}
+
+	public Page<${ClassName}> findPage(Page<${ClassName}> page, ${ClassName} ${className}) {
+		//获取数据库数据
+		Page<${ClassName}> pageReuslt=super.findPage(page, ${className});
+		return pageReuslt;
+	}
+
+	public Page<${ClassName}> findPageCache(Page<${ClassName}> page, ${ClassName} ${className}) {
+		//获取缓存数据
+		String findPageKey =  RedisUtils.getFindPageKey(${ClassName}Service.class.getName(),JSON.toJSONString(page)+JSON.toJSONString(${className}));
+		Page<${ClassName}> pageReuslt=(Page<${ClassName}>)redisUtils.get(findPageKey);
+		if(pageReuslt!=null) return pageReuslt;
+		//获取数据库数据
+		pageReuslt=super.findPage(page, ${className});
+		//设置缓存数据
+		redisUtils.set(findPageKey,pageReuslt);
+		return pageReuslt;
+	}
+
+	@Transactional(readOnly = false)
+	public void save(${ClassName} ${className}) {
+		//保存数据库记录
+		super.save(${className});
+		//设置清除缓存数据
+		redisUtils.remove(RedisUtils.getIdKey(${ClassName}Service.class.getName(),${className}.getId()));
+		//清除列表和页面缓存数据
+		redisUtils.removePattern(RedisUtils.getFindListKeyPattern(${ClassName}Service.class.getName()));
+		redisUtils.removePattern(RedisUtils.getFinPageKeyPattern(${ClassName}Service.class.getName()));
+	}
+	
+	@Transactional(readOnly = false)
+	public void delete(${ClassName} ${className}) {
+		//清除记录缓存数据
+		redisUtils.remove(RedisUtils.getIdKey(${ClassName}Service.class.getName(),${className}.getId()));
+		//删除数据库记录
+		super.delete(${className});
+		//清除列表和页面缓存数据
+		redisUtils.removePattern(RedisUtils.getFindListKeyPattern(${ClassName}Service.class.getName()));
+		redisUtils.removePattern(RedisUtils.getFinPageKeyPattern(${ClassName}Service.class.getName()));
+	}
+
+	@Transactional(readOnly = false)
+	public void deleteByLogic(${ClassName} ${className}) {
+		//清除记录缓存数据
+		redisUtils.remove(RedisUtils.getIdKey(${ClassName}Service.class.getName(),${className}.getId()));
+		//逻辑删除数据库记录
+		super.deleteByLogic(${className});
+		//清除列表和页面缓存数据
+		redisUtils.removePattern(RedisUtils.getFindListKeyPattern(${ClassName}Service.class.getName()));
+		redisUtils.removePattern(RedisUtils.getFinPageKeyPattern(${ClassName}Service.class.getName()));
+	}
+
+}]]>
+	</content>
+</template>

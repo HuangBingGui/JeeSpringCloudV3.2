@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<name>entity</name>
+	<filePath>src/main/java/${packageName}/${moduleName}/entity/${subModuleName}</filePath>
+	<fileName>${ClassName}.java</fileName>
+	<content><![CDATA[
+/**
+ * * Copyright &copy; 2015-2020 <a href="https://gitee.com/JeeHuangBingGui/jeeSpringCloud">JeeSpringCloud</a> All rights reserved..
+ */
+package ${packageName}.${moduleName}.entity<#if subModuleName != "">.${subModuleName}</#if>;
+
+<#list table.importList as i>
+import ${i};
+</#list>
+
+import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.jeespring.common.persistence.AbstractBaseEntity;
+import com.jeespring.common.utils.excel.annotation.ExcelField;
+import com.jeespring.modules.sys.utils.DictUtils;
+
+/**
+ * ${functionName}Entity
+ * @author ${functionAuthor}
+ * @version ${functionVersion}
+ */
+public class ${ClassName} extends AbstractBaseEntity<${ClassName}> {
+	
+	private static final long serialVersionUID = 1L;
+	<#-- 生成字段属性 -->
+	<#list table.columnList as c>
+		<#-- 如果不是基类属性 -->
+		<#if c.isNotBaseField>
+			<#-- 父类对象 -->
+			<#if table.parentExists && table.parentTableFk == c.name>
+	private ${table.parent.className?cap_first}  ${table.parent.className?uncap_first};		<#if c.comments??>// ${c.comments} 父类${c.javaField}</#if>
+			<#-- 其它字段 -->
+			<#else>
+				<#if c.javaType?? && c.javaField?index_of(".") != -1 >
+				<#assign indexOf = c.javaField?index_of(".")>
+	private ${c.javaType} ${c.javaField?substring(0,indexOf)};		<#if c.comments??>// ${c.comments}</#if>
+				<#else>
+	private ${c.javaType} ${c.javaField};		<#if c.comments??>// ${c.comments}</#if>
+			 	</#if>
+				<#if c.javaType?? && c.javaType == "byte[]">
+    private String ${c.javaField}Text;		<#if c.comments??>// ${c.comments}Text</#if>
+			     </#if>
+			     <#if c.showType == "select" || c.showType == "checkbox" || c.showType == "radiobox">
+	private String ${c.javaField}Label;		<#if c.comments??>// ${c.comments}Label</#if>
+	private String ${c.javaField}Picture;		<#if c.comments??>// ${c.comments}Picture</#if>
+			      </#if>
+			     <#if c.jdbcType?? && (c.jdbcType == "int(11)" || c.jdbcType == "decimal(10,3)") && table.tableType!="2" && c.name?index_of("_id") == -1 && c.name?index_of("_type") == -1>
+    private Double sum${c.javaField?cap_first};		<#if c.comments??>// sum${c.comments}</#if>
+				</#if>
+			</#if>
+		</#if>
+	</#list>
+	<#-- 范围条件字段 -->
+	<#list table.columnList as c>
+		<#if c.isQuery?? && c.isQuery == "1" && c.queryType == "between">
+	private ${c.javaType} begin${c.javaField?cap_first};		<#if c.comments??>// 开始 ${c.comments}</#if>
+	private ${c.javaType} end${c.javaField?cap_first};		<#if c.comments??>// 结束 ${c.comments}</#if>
+		</#if>
+	</#list>
+	<#-- 子表列表字段 -->
+	<#list table.childList as c>
+	private List<${c.className?cap_first}> ${c.className?uncap_first}List = Lists.newArrayList();		// 子表列表
+	</#list>
+	
+	<#-- 构造方法 -->
+	public ${ClassName}() {
+		super();
+	}
+
+	public ${ClassName}(String id){
+		super(id);
+	}
+	<#list table.columnList as c>
+		<#if table.parentExists && table.parentTableFk == c.name>
+
+	public ${ClassName}(${table.parent.className?cap_first} ${table.parent.className?uncap_first}){
+		this.${table.parent.className?uncap_first} = ${table.parent.className?uncap_first};
+	}
+		</#if>
+	</#list>
+
+	<#-- 生成get和set方法 -->
+	<#list table.columnList as c>
+		<#-- 如果不是基类属性 -->
+		<#if c.isNotBaseField>
+			<#list c.simpleAnnotationList as a>
+	@${a}
+			</#list>
+			<#-- 父类对象 ${c.javaField?cap_first}${c.javaField}-->
+			<#if table.parentExists && table.parentTableFk == c.name>
+	@JsonIgnore
+	@JSONField(serialize=false)
+	public ${table.parent.className?cap_first} get${table.parent.className?cap_first}() {
+		return ${table.parent.className?uncap_first};
+	}
+
+	public void set${table.parent.className?cap_first}(${table.parent.className?cap_first} ${table.parent.className?uncap_first}) {
+		this.${table.parent.className?uncap_first} = ${table.parent.className?uncap_first};
+	}
+	
+			<#-- 其它字段 -->
+			<#else>
+				<#if c.showType == "select" || c.showType == "checkbox" || c.showType == "radiobox">
+				@ExcelField(title="<#if c.comments??>${c.comments}<#else>${c.javaField}</#if>", dictType="${c.dictType}", align=2, sort=${c_index})
+				<#elseif c.showType == "userselect" || c.showType == "officeselect" || c.showType == "areaselect">
+				@ExcelField(title="<#if c.comments??>${c.comments}<#else>${c.javaField}</#if>", fieldType=${c.simpleJavaType}.class, value="${c.javaFieldName}", align=2, sort=${c_index})
+				<#else>
+				@ExcelField(title="<#if c.comments??>${c.comments}<#else>${c.javaField}</#if>", align=2, sort=${c_index})
+				</#if>
+				<#if c.javaType?? && c.javaType != "byte[]">
+					<#if c.javaType?? && c.javaField?index_of(".") != -1 >
+					<#assign indexOf = c.javaField?index_of(".")>
+	public ${c.simpleJavaType} get${c.javaField?substring(0,indexOf)?cap_first}() {
+		return ${c.javaField?substring(0,indexOf)};
+	}
+
+	public void set${c.javaField?substring(0,indexOf)?cap_first}(${c.simpleJavaType} ${c.javaField?substring(0,indexOf)}) {
+		this.${c.javaField?substring(0,indexOf)} = ${c.javaField?substring(0,indexOf)};
+	}
+					<#else>
+	public ${c.simpleJavaType} get${c.javaField?cap_first}() {
+		return ${c.javaField};
+	}
+
+	public void set${c.javaField?cap_first}(${c.simpleJavaType} ${c.javaField}) {
+		this.${c.javaField} = ${c.javaField};
+	}
+
+					<#if c.jdbcType?? && (c.jdbcType == "int(11)" || c.jdbcType == "decimal(10,3)") && table.tableType!="2" && c.name?index_of("_id") == -1 && c.name?index_of("_type") == -1>
+	public Double getSum${c.javaField?cap_first}() {
+		return sum${c.javaField?cap_first};
+	}
+
+	public void setSum${c.javaField?cap_first}(Double ${c.javaField}) {
+		this.sum${c.javaField?cap_first} = ${c.javaField};
+	}
+					</#if>
+
+					</#if>
+					<#if c.showType == "select" || c.showType == "radiobox">
+	public String get${c.javaField?cap_first}Label() {
+		return DictUtils.getDictLabel(${c.javaField},"${c.dictType}","");
+	}
+	public String get${c.javaField?cap_first}Picture() {
+		return DictUtils.getDictPicture(${c.javaField},"${c.dictType}","");
+	}
+					</#if>
+					<#if c.showType == "checkbox" >
+	public String get${c.javaField?cap_first}Label() {
+		return DictUtils.getDictLabels(${c.javaField},"${c.dictType}","");
+	}
+					</#if>
+				<#else>
+	public ${c.simpleJavaType} get${c.javaField?cap_first}() {
+		return this.${c.javaField};
+	}
+
+	public void set${c.javaField?cap_first}(${c.simpleJavaType} ${c.javaField}) {
+		this.${c.javaField} = ${c.javaField};
+		try {
+			this.${c.javaField}Text=new String(${c.javaField}, "utf8");
+		} catch (Exception e) {
+		}
+	}
+
+	public String get${c.javaField?cap_first}Text() {
+		try {
+			this.${c.javaField}Text=new String(${c.javaField}, "utf8");
+		} catch (Exception e) {
+		}
+		return ${c.javaField}Text;
+	}
+
+	public void set${c.javaField?cap_first}Text(String ${c.javaField}Text) {
+		try {
+			this.${c.javaField}Text=${c.javaField}Text;
+			this.${c.javaField} =  ${c.javaField}Text.getBytes("utf8");
+		} catch (Exception e) {
+		}
+
+	}
+				</#if>
+			</#if>
+		</#if>
+	</#list>
+	<#-- 范围条件字段get和set方法 -->
+	<#list table.columnList as c>
+		<#if c.isQuery?? && c.isQuery == "1" && c.queryType == "between">
+	public ${c.simpleJavaType} getBegin${c.javaField?cap_first}() {
+		return begin${c.javaField?cap_first};
+	}
+
+	public void setBegin${c.javaField?cap_first}(${c.simpleJavaType} begin${c.javaField?cap_first}) {
+		this.begin${c.javaField?cap_first} = begin${c.javaField?cap_first};
+	}
+	
+	public ${c.simpleJavaType} getEnd${c.javaField?cap_first}() {
+		return end${c.javaField?cap_first};
+	}
+
+	public void setEnd${c.javaField?cap_first}(${c.simpleJavaType} end${c.javaField?cap_first}) {
+		this.end${c.javaField?cap_first} = end${c.javaField?cap_first};
+	}
+		
+		</#if>
+	</#list>
+	<#-- 子表列表get和set方法 -->
+	<#list table.childList as c>
+	public List<${c.className?cap_first}> get${c.className?cap_first}List() {
+		return ${c.className?uncap_first}List;
+	}
+
+	public void set${c.className?cap_first}List(List<${c.className?cap_first}> ${c.className?uncap_first}List) {
+		this.${c.className?uncap_first}List = ${c.className?uncap_first}List;
+	}
+	</#list>
+}]]>
+	</content>
+</template>

@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeespring.modules.sys.dao.SysConfigDao">
+    
+	<sql id="sysConfigColumns">
+					a.id AS "id",
+					a.type AS "type",
+					a.value AS "value",
+					a.label AS "label",
+					a.description AS "description",
+					a.sort AS "sort",
+					a.create_by AS "createBy.id",
+					a.create_date AS "createDate",
+					a.update_by AS "updateBy.id",
+					a.update_date AS "updateDate",
+					a.remarks AS "remarks",
+					a.del_flag AS "delFlag",
+					a.picture AS "picture"
+	</sql>
+
+	<sql id="sysConfigColumnsList">
+					a.id AS "id",
+					a.type AS "type",
+					a.value AS "value",
+					a.label AS "label",
+					a.description AS "description",
+					a.sort AS "sort",
+					a.create_by AS "createBy.id",
+					a.create_date AS "createDate",
+					a.update_by AS "updateBy.id",
+					a.update_date AS "updateDate",
+					a.remarks AS "remarks",
+					a.del_flag AS "delFlag",
+					a.picture AS "picture"
+	</sql>
+
+	<sql id="sysConfigJoins">
+	</sql>
+    
+	<select id="get" resultType="SysConfig">
+		SELECT 
+			<include refid="sysConfigColumns"/>
+		FROM sys_config a
+		<include refid="sysConfigJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SysConfig">
+		SELECT 
+			<include refid="sysConfigColumnsList"/>
+		FROM sys_config a
+		<include refid="sysConfigJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type LIKE
+				<if test="dbName == 'oracle'">'%'||#{type}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{type}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{type},'%')</if>
+			</if>
+			<if test="value != null and value != ''">
+				AND a.value = #{value}
+			</if>
+			<if test="label != null and label != ''">
+				AND a.label = #{label}
+			</if>
+			<if test="description != null and description != ''">
+				AND a.description LIKE 
+					<if test="dbName == 'oracle'">'%'||#{description}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{description}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{description},'%')</if>
+			</if>
+			<if test="sort != null and sort != ''">
+				AND a.sort = #{sort}
+			</if>
+			<if test="createBy != null and createBy.id != null and createBy.id != ''">
+				AND a.create_by = #{createBy.id}
+			</if>
+			<if test="updateBy != null and updateBy.id != null and updateBy.id != ''">
+				AND a.update_by = #{updateBy.id}
+			</if>
+			<if test="delFlag != null and delFlag != ''">
+				AND a.del_flag = #{delFlag}
+			</if>
+			<if test="picture != null and picture != ''">
+				AND a.picture = #{picture}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SysConfig">
+		SELECT 
+			<include refid="sysConfigColumnsList"/>
+		FROM sys_config a
+		<include refid="sysConfigJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sys_config(
+			id,
+			type,
+			value,
+			label,
+			description,
+			sort,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			picture
+		) VALUES (
+			#{id},
+			#{type},
+			#{value},
+			#{label},
+			#{description},
+			#{sort},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+		    #{picture}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_config SET 	
+			type = #{type},
+			value = #{value},
+			label = #{label},
+			description = #{description},
+			sort = #{sort},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			picture = #{picture}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM sys_config
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE sys_config SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="SysConfig" statementType="STATEMENT">
+		select * FROM sys_config  where ${propertyName} = '${value}'
+	</select>
+</mapper>

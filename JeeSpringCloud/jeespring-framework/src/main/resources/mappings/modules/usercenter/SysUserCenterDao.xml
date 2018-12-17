@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeespring.modules.usercenter.dao.SysUserCenterDao">
+    
+	<sql id="sysUserCenterColumns">
+					a.id AS "id",
+					a.user_id AS "userId",
+					a.user_name AS "userName",
+					a.user_phone AS "userPhone",
+					a.lat AS "lat",
+					a.lng AS "lng",
+					a.city AS "city",
+					a.address AS "address",
+					a.create_by AS "createBy.id",
+					a.create_date AS "createDate",
+					a.update_by AS "updateBy.id",
+					a.update_date AS "updateDate",
+					a.del_flag AS "delFlag",
+					a.ip AS "ip"
+	</sql>
+
+	<sql id="sysUserCenterColumnsList">
+					a.id AS "id",
+					a.user_id AS "userId",
+					CONCAT(a.user_name,'(使用',count(*),'次)') AS "userName",
+					a.user_phone AS "userPhone",
+					a.lat AS "lat",
+					a.lng AS "lng",
+					a.city AS "city",
+					a.address AS "address",
+					a.create_by AS "createBy.id",
+					max(a.create_date) AS "createDate",
+					a.update_by AS "updateBy.id",
+					max(a.update_date) AS "updateDate",
+					a.del_flag AS "delFlag",
+					a.ip AS "ip"
+	</sql>
+
+	<sql id="sysUserCenterJoins">
+	</sql>
+    
+	<select id="get" resultType="SysUserCenter">
+		SELECT 
+			<include refid="sysUserCenterColumns"/>
+		FROM sys_user_center a
+		<include refid="sysUserCenterJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SysUserCenter">
+		SELECT 
+			<include refid="sysUserCenterColumnsList"/>
+		FROM sys_user_center a
+		<include refid="sysUserCenterJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="userId != null and userId != ''">
+				AND a.user_id = #{userId}
+			</if>
+			<if test="userName != null and userName != ''">
+				AND a.user_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{userName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{userName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{userName},'%')</if>
+			</if>
+			<if test="userPhone != null and userPhone != ''">
+				AND a.user_phone = #{userPhone}
+			</if>
+			<if test="lat != null and lat != ''">
+				AND a.lat = #{lat}
+			</if>
+			<if test="lng != null and lng != ''">
+				AND a.lng = #{lng}
+			</if>
+			<if test="city != null and lat != ''">
+				AND a.city = #{city}
+			</if>
+			<if test="address != null and lng != ''">
+				AND a.address = #{address}
+			</if>
+			<if test="createBy != null and createBy.id != null and createBy.id != ''">
+				AND a.create_by = #{createBy.id}
+			</if>
+			<if test="beginCreateDate != null and endCreateDate != null ">
+				AND a.create_date BETWEEN #{beginCreateDate} AND #{endCreateDate}
+			</if>
+			<if test="updateBy != null and updateBy.id != null and updateBy.id != ''">
+				AND a.update_by = #{updateBy.id}
+			</if>
+			<if test="beginUpdateDate != null and endUpdateDate != null ">
+				AND a.update_date BETWEEN #{beginUpdateDate} AND #{endUpdateDate}
+			</if>
+			<if test="delFlag != null and delFlag != ''">
+				AND a.del_flag = #{delFlag}
+			</if>
+		</where>
+		 GROUP BY
+		 a.city,a.address,a.user_name
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SysUserCenter">
+		SELECT 
+			<include refid="sysUserCenterColumnsList"/>
+		FROM sys_user_center a
+		<include refid="sysUserCenterJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sys_user_center(
+			id,
+			user_id,
+			user_name,
+			user_phone,
+			lat,
+			lng,
+			city,
+			address,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag,
+			ip
+		) VALUES (
+			#{id},
+			#{userId},
+			#{userName},
+			#{userPhone},
+			#{lat},
+			#{lng},
+			#{city},
+			#{address},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag},
+			#{ip}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_user_center SET 	
+			user_id = #{userId},
+			user_phone = #{userPhone},
+			lat = #{lat},
+			lng = #{lng},
+			city = #{city},
+			address = #{address},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			ip=#{ip}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM sys_user_center
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE sys_user_center SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="SysUserCenter" statementType="STATEMENT">
+		select * FROM sys_user_center  where ${propertyName} = '${value}'
+	</select>
+</mapper>

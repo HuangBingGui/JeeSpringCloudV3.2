@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeespring.modules.echarts.dao.PieClassDao">
+    
+	<sql id="pieClassColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.class_name AS "className",
+		a.num AS "num"
+	</sql>
+	
+	<sql id="pieClassJoins">
+	</sql>
+	
+    
+	<select id="get" resultType="PieClass" >
+		SELECT 
+			<include refid="pieClassColumns"/>
+		FROM test_pie_class a
+		<include refid="pieClassJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="PieClass" >
+		SELECT 
+			<include refid="pieClassColumns"/>
+		FROM test_pie_class a
+		<include refid="pieClassJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="className != null and className != ''">
+				AND a.class_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{className}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{className}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{className},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="PieClass" >
+		SELECT 
+			<include refid="pieClassColumns"/>
+		FROM test_pie_class a
+		<include refid="pieClassJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO test_pie_class(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			class_name,
+			num
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{className},
+			#{num}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE test_pie_class SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			class_name = #{className},
+			num = #{num}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM test_pie_class
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE test_pie_class SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="PieClass" statementType="STATEMENT">
+		select * FROM test_pie_class  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

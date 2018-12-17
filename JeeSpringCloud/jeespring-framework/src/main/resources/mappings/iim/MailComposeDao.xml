@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeespring.modules.iim.dao.MailComposeDao">
+    
+	<sql id="mailComposeColumns">
+		a.id AS "id",
+		a.status AS "status",
+		a.readstatus AS "readstatus",
+		a.senderid AS "sender.id",
+		a.receiverid AS "receiver.id",
+		a.sendtime AS "sendtime",
+		a.mailid AS "mail.id",
+		receiver.name AS "receiver.name",
+		mail.title AS "mail.title",
+		mail.overview AS "mail.overview",
+		mail.content AS "mail.content"
+	</sql>
+	
+	<sql id="mailComposeJoins">
+		LEFT JOIN iim_mail mail ON mail.id = a.mailid
+		LEFT JOIN sys_user receiver ON receiver.id = a.receiverid
+	</sql>
+    
+	<select id="get" resultType="MailCompose">
+		SELECT 
+			<include refid="mailComposeColumns"/>
+		FROM iim_mail_compose a
+		<include refid="mailComposeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="MailCompose">
+		SELECT 
+			<include refid="mailComposeColumns"/>
+		FROM iim_mail_compose a
+		<include refid="mailComposeJoins"/>
+		<where>
+			<if test="status != null  and status != ''">
+				AND a.status = #{status}
+			</if>
+			
+			<if test="mail != null and mail.title != null and mail.title != ''">
+				AND ( mail.title like 
+					<if test="dbName == 'oracle'">'%'||#{mail.title}||'%'</if>
+					<if test="dbName == 'mysql'">CONCAT('%', #{mail.title}, '%')</if>
+					or 
+					mail.content like
+					<if test="dbName == 'oracle'">'%'||#{mail.title}||'%'</if>
+					<if test="dbName == 'mysql'">CONCAT('%', #{mail.title}, '%')</if>
+					)
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="MailCompose">
+		SELECT 
+			<include refid="mailComposeColumns"/>
+		FROM iim_mail_compose a
+		<include refid="mailComposeJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="getCount" resultType="java.lang.Integer">
+		SELECT count(*)
+		FROM iim_mail_compose a
+		<include refid="mailComposeJoins"/>
+		<where>
+			<if test="sender != null and sender.id != null and sender.id != ''">
+				AND a.senderid = #{sender.id}
+			</if>
+			
+			<if test="status !=null and status != ''">
+				and a.status = #{status}
+			</if>
+		</where>		
+	
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO iim_mail_compose(
+			id,
+			status,
+			readstatus,
+			senderid,
+			receiverid,
+			sendtime,
+			mailid
+		) VALUES (
+			#{id},
+			#{status},
+			#{readstatus},
+			#{sender.id},
+			#{receiver.id},
+			#{sendtime},
+			#{mail.id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE iim_mail_compose SET 	
+			status = #{status},
+			readstatus = #{readstatus},
+			senderid = #{sender.id},
+			receiverid = #{receiver.id},
+			sendtime = #{sendtime},
+			mailid = #{mail.id}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM iim_mail_compose
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE mailid = #{mail.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+	<!-- <update id="deleteByLogic">
+		DELETE FROM iim_mail_compose
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE mailid = #{mail.id}
+			</otherwise>
+		</choose>
+	</update>-->
+	
+</mapper>

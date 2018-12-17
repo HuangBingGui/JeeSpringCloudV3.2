@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeespring.modules.job.dao.SysJobDao">
+    
+	<sql id="sysJobColumns">
+					a.job_id AS "id",
+					a.job_name AS "jobName",
+					a.job_group AS "jobGroup",
+					a.method_name AS "methodName",
+					a.method_params AS "methodParams",
+					a.cron_expression AS "cronExpression",
+					a.misfire_policy AS "misfirePolicy",
+					a.status AS "status",
+					a.create_by AS "createBy.id",
+					a.create_date AS "createDate",
+					a.update_by AS "updateBy.id",
+					a.update_date AS "updateDate",
+					a.remark AS "remark",
+					a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="sysJobColumnsList">
+					a.job_id AS "id",
+					a.job_name AS "jobName",
+					a.job_group AS "jobGroup",
+					a.method_name AS "methodName",
+					a.method_params AS "methodParams",
+					a.cron_expression AS "cronExpression",
+					a.misfire_policy AS "misfirePolicy",
+					a.status AS "status",
+					a.create_by AS "createBy.id",
+					a.create_date AS "createDate",
+					a.update_by AS "updateBy.id",
+					a.update_date AS "updateDate",
+					a.remark AS "remark",
+					a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="sysJobJoins">
+	</sql>
+    
+	<select id="get" resultType="SysJob">
+		SELECT 
+			<include refid="sysJobColumns"/>
+		FROM sys_job a
+		<include refid="sysJobJoins"/>
+		WHERE a.job_id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SysJob">
+		SELECT 
+			<include refid="sysJobColumnsList"/>
+		FROM sys_job a
+		<include refid="sysJobJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="id != null and id != ''">
+				AND a.job_id = #{id}
+			</if>
+			<if test="jobName != null and jobName != ''">
+				AND a.job_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{jobName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{jobName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{jobName},'%')</if>
+			</if>
+			<if test="jobGroup != null and jobGroup != ''">
+				AND a.job_group = #{jobGroup}
+			</if>
+			<if test="methodName != null and methodName != ''">
+				AND a.method_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{methodName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{methodName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{methodName},'%')</if>
+			</if>
+			<if test="methodParams != null and methodParams != ''">
+				AND a.method_params = #{methodParams}
+			</if>
+			<if test="cronExpression != null and cronExpression != ''">
+				AND a.cron_expression = #{cronExpression}
+			</if>
+			<if test="misfirePolicy != null and misfirePolicy != ''">
+				AND a.misfire_policy = #{misfirePolicy}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="createBy != null and createBy.id != null and createBy.id != ''">
+				AND a.create_by = #{createBy.id}
+			</if>
+			<if test="beginCreateDate != null and endCreateDate != null ">
+				AND a.create_date BETWEEN #{beginCreateDate} AND #{endCreateDate}
+			</if>
+			<if test="updateBy != null and updateBy.id != null and updateBy.id != ''">
+				AND a.update_by = #{updateBy.id}
+			</if>
+			<if test="beginUpdateDate != null and endUpdateDate != null ">
+				AND a.update_date BETWEEN #{beginUpdateDate} AND #{endUpdateDate}
+			</if>
+			<if test="remark != null and remark != ''">
+				AND a.remark LIKE 
+					<if test="dbName == 'oracle'">'%'||#{remark}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{remark}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{remark},'%')</if>
+			</if>
+			<if test="delFlag != null and delFlag != ''">
+				AND a.del_flag = #{delFlag}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SysJob">
+		SELECT 
+			<include refid="sysJobColumnsList"/>
+		FROM sys_job a
+		<include refid="sysJobJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		<selectKey keyProperty="id" resultType="String">
+			select LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO sys_job(
+			job_name,
+			job_group,
+			method_name,
+			method_params,
+			cron_expression,
+			misfire_policy,
+			status,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remark,
+			del_flag
+		) VALUES (
+			#{jobName},
+			#{jobGroup},
+			#{methodName},
+			#{methodParams},
+			#{cronExpression},
+			#{misfirePolicy},
+			#{status},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remark},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_job SET 	
+			job_id = #{id},
+			job_name = #{jobName},
+			job_group = #{jobGroup},
+			method_name = #{methodName},
+			method_params = #{methodParams},
+			cron_expression = #{cronExpression},
+			misfire_policy = #{misfirePolicy},
+			status = #{status},
+			create_date = #{createDate},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remark = #{remark},
+			del_flag = #{delFlag}
+		WHERE job_id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM sys_job
+		WHERE job_id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE sys_job SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE job_id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="SysJob" statementType="STATEMENT">
+		select * FROM sys_job  where ${propertyName} = '${value}'
+	</select>
+
+	<select id="total" resultType="SysJob">
+		SELECT
+			<choose>
+				<when test=" totalType != null and totalType != ''">
+					DATE_FORMAT(a.create_date,'${totalType}') as totalDate,
+				</when>
+				<otherwise>
+				 </otherwise>
+			</choose>
+			count(*) as totalCount
+		FROM
+			sys_job a
+		<where>
+			1=1
+			and a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="id != null and id != ''">
+				AND a.job_id = #{id}
+			</if>
+			<if test="jobName != null and jobName != ''">
+				AND a.job_name LIKE
+					<if test="dbName == 'oracle'">'%'||#{jobName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{jobName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{jobName},'%')</if>
+			</if>
+			<if test="jobGroup != null and jobGroup != ''">
+				AND a.job_group = #{jobGroup}
+			</if>
+			<if test="methodName != null and methodName != ''">
+				AND a.method_name LIKE
+					<if test="dbName == 'oracle'">'%'||#{methodName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{methodName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{methodName},'%')</if>
+			</if>
+			<if test="methodParams != null and methodParams != ''">
+				AND a.method_params = #{methodParams}
+			</if>
+			<if test="cronExpression != null and cronExpression != ''">
+				AND a.cron_expression = #{cronExpression}
+			</if>
+			<if test="misfirePolicy != null and misfirePolicy != ''">
+				AND a.misfire_policy = #{misfirePolicy}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="createBy != null and createBy.id != null and createBy.id != ''">
+				AND a.create_by = #{createBy.id}
+			</if>
+			<if test="beginCreateDate != null and endCreateDate != null ">
+				AND a.create_date BETWEEN #{beginCreateDate} AND #{endCreateDate}
+			</if>
+			<if test="updateBy != null and updateBy.id != null and updateBy.id != ''">
+				AND a.update_by = #{updateBy.id}
+			</if>
+			<if test="beginUpdateDate != null and endUpdateDate != null ">
+				AND a.update_date BETWEEN #{beginUpdateDate} AND #{endUpdateDate}
+			</if>
+			<if test="remark != null and remark != ''">
+				AND a.remark LIKE
+					<if test="dbName == 'oracle'">'%'||#{remark}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{remark}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{remark},'%')</if>
+			</if>
+			<if test="delFlag != null and delFlag != ''">
+				AND a.del_flag = #{delFlag}
+			</if>
+		</where>
+		<choose>
+			<when test=" groupBy != null and groupBy != '' and totalType != null and totalType != '' ">
+				GROUP BY DATE_FORMAT(a.create_date,'${totalType}'),${groupBy}
+			</when>
+			<when test=" groupBy != null and groupBy != ''">
+				GROUP BY ${groupBy}
+			</when>
+			<when test=" totalType != null and totalType != ''">
+				GROUP BY DATE_FORMAT(a.create_date,'${totalType}')
+			</when>
+			<otherwise>
+			 </otherwise>
+		</choose>
+		<choose>
+			<when test=" orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+</mapper>

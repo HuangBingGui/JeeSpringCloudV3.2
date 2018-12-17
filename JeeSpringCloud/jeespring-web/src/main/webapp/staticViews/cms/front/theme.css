@@ -1,0 +1,26 @@
+body,.breadcrumb,h4{
+	background-color: #fff;
+}
+.navbar .nav{
+	float:right;
+}
+ul li{
+	list-style-type: none;
+}
+.navbar-inner{
+	/*background: #3c8dbc;*/
+}
+
+.navbar .nav>li>a{
+	font-size: 14px;
+	font-weight: normal;
+	/*color: #f9f9f9;*/
+	font-family:inherit;
+}
+.navbar .brand{
+	/*color: #f9f9f9;*/
+}
+.navbar .nav>li>a:focus, .navbar .nav>li>a:hover{
+	/*color: #fff;*/
+}
+

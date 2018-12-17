@@ -1,0 +1,48 @@
+/* Validation */
+label.error {
+    color: #cc5965;
+    display: inline-block;
+    margin-left: 5px;
+}
+.login-page {
+    overflow: hidden;
+    padding: 0px;
+    background-position: center;
+}
+#logo{
+    width: 150px;height: 150px;
+}
+#vid {
+    display: none;
+    background-color: white;
+    opacity: 1;
+    visibility: visible;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    object-position: center center;
+}
+#menu {
+    z-index: 10000;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    border-radius: 3px;
+    padding: 10px;
+    width: 100%;
+    margin: auto 50px;
+}
+
+#loginForm{
+    background: rgba(255,255,255,.2);border: 1px solid rgba(255,255,255,.3);border-radius: 3px;padding: 30px;
+}
+
+#hplaT{
+    position: absolute;bottom: 0px;right: 0px;/* background: rgba(255,255,255,.2); */border: 1px solid rgba(255,255,255,.3);border-radius: 3px;padding: 10px;width: 30%;
+}
+

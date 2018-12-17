@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeespring.modules.iim.dao.ChatHistoryDao">
+    
+	<sql id="chatHistoryColumns">
+		a.id AS "id",
+		a.userid1 AS "userid1",
+		a.userid2 AS "userid2",
+		a.msg AS "msg",
+		a.status AS "status",
+		a.create_date AS "createDate"
+	</sql>
+	
+	<sql id="chatHistoryJoins">
+	</sql>
+    
+	<select id="get" resultType="ChatHistory">
+		SELECT 
+			<include refid="chatHistoryColumns"/>
+		FROM iim_chat_history a
+		<include refid="chatHistoryJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ChatHistory">
+		SELECT 
+			<include refid="chatHistoryColumns"/>
+		FROM iim_chat_history a
+		<include refid="chatHistoryJoins"/>
+		<where>
+			
+			<if test="userid1 != null and userid1 != ''">
+				AND a.userid1 = #{userid1}
+			</if>
+			<if test="userid2 != null and userid2 != ''">
+				AND a.userid2 = #{userid2}
+			</if>
+			<if test="msg != null and msg != ''">
+				AND a.msg LIKE 
+					<if test="dbName == 'oracle'">'%'||#{msg}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{msg}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{msg},'%')</if>
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="createDate != null and createDate != ''">
+				AND a.create_date = #{createDate}
+			</if>
+		</where>
+				ORDER BY a.create_date asc
+	</select>
+	
+	<select id="findLogList" resultType="ChatHistory">
+		SELECT 
+			<include refid="chatHistoryColumns"/>
+		FROM iim_chat_history a
+		<include refid="chatHistoryJoins"/>
+		<where>
+			
+			<if test="userid1 != null and userid1 != '' and userid2 != null and userid2 != ''">
+				AND  ((a.userid1 = #{userid1} AND a.userid2 = #{userid2}) or  (a.userid1 = #{userid2} AND a.userid2 = #{userid1}))
+			</if>
+			<if test="msg != null and msg != ''">
+				AND a.msg LIKE 
+					<if test="dbName == 'oracle'">'%'||#{msg}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{msg}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{msg},'%')</if>
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="createDate != null and createDate != ''">
+				AND a.create_date = #{createDate}
+			</if>
+		</where>
+				ORDER BY a.create_date desc
+	</select>
+	
+	<select id="findAllList" resultType="ChatHistory">
+		SELECT 
+			<include refid="chatHistoryColumns"/>
+		FROM iim_chat_history a
+		<include refid="chatHistoryJoins"/>
+		<where>
+			
+		</where>		
+		ORDER BY a.create_date asc
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO iim_chat_history(
+			id,
+			userid1,
+			userid2,
+			msg,
+			status,
+			create_date
+		) VALUES (
+			#{id},
+			#{userid1},
+			#{userid2},
+			#{msg},
+			#{status},
+			#{createDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE iim_chat_history SET 	
+			userid1 = #{userid1},
+			userid2 = #{userid2},
+			msg = #{msg},
+			status = #{status},
+			create_date = #{createDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM iim_chat_history
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 查询全部用户数目 -->
+	<select id="findUnReadCount" resultType="int">
+		SELECT
+			COUNT(1)
+		FROM iim_chat_history a WHERE
+				a.userid1 = #{userid2} AND a.userid2 = #{userid1}
+				AND a.status = '0'
+	</select>
+	
+</mapper>

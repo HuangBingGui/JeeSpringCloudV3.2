@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.jeespring</groupId>
+	<artifactId>jeespring</artifactId>
+	<name>jeespring</name>
+	<description>jeespring</description>
+	<version>1.0.0</version>
+	<packaging>pom</packaging>
+	
+	<parent>
+		<groupId>com.jeespring</groupId>
+		<artifactId>jeespring-parent</artifactId>
+		<version>1.0.0</version>
+		<relativePath>pom-parent.xml</relativePath>
+	</parent>
+	
+	<modules>
+		<module>jeespring-framework</module>
+		<module>jeespring-gencode</module>
+		<module>jeespring-act</module>
+		<module>jeespring-company</module>
+		<module>jeespring-mq</module>
+		<module>jeespring-cms</module>
+        <module>jeespring-web</module>
+		<module>jeespring-webDubboProvider</module>
+    </modules>
+	
+</project>

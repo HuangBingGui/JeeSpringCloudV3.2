@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeespring.modules.monitor.dao.MonitorDao">
+    
+	<sql id="monitorColumns">
+		a.id AS "id",
+		a.cpu AS "cpu",
+		a.jvm AS "jvm",
+		a.ram AS "ram",
+		a.toemail AS "toEmail"
+	</sql>
+	
+	<sql id="monitorJoins">
+	</sql>
+    
+	<select id="get" resultType="Monitor">
+		SELECT 
+			<include refid="monitorColumns"/>
+		FROM monitor a
+		<include refid="monitorJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Monitor">
+		SELECT 
+			<include refid="monitorColumns"/>
+		FROM monitor a
+		<include refid="monitorJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Monitor">
+		SELECT 
+			<include refid="monitorColumns"/>
+		FROM monitor a
+		<include refid="monitorJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO monitor(
+			id,
+			cpu,
+			jvm,
+			ram,
+			toemail
+		) VALUES (
+			#{id},
+			#{cpu},
+			#{jvm},
+			#{ram},
+			#{toEmail}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE monitor SET 	
+			cpu = #{cpu},
+			jvm = #{jvm},
+			ram = #{ram},
+			toemail = #{toEmail}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM monitor
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE monitor SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="Monitor" statementType="STATEMENT">
+		select * FROM monitor  where ${propertyName} = '${value}'
+	</select>
+</mapper>

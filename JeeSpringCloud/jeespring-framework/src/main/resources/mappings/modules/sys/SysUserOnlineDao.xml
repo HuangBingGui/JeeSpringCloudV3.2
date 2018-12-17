@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeespring.modules.sys.dao.SysUserOnlineDao">
+    
+	<sql id="sysUserOnlineColumns">
+					a.sessionid AS "id",
+					a.login_name AS "loginName",
+					a.dept_name AS "deptName",
+					a.ipaddr AS "ipaddr",
+					a.login_location AS "loginLocation",
+					a.browser AS "browser",
+					a.os AS "os",
+					a.status AS "status",
+					a.start_timestsamp AS "startTimestsamp",
+					a.last_access_time AS "lastAccessTime",
+					a.expire_time AS "expireTime",
+					a.create_by AS "createBy.id",
+					a.create_date AS "createDate",
+					a.update_by AS "updateBy.id",
+					a.update_date AS "updateDate",
+					a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="sysUserOnlineColumnsList">
+					a.sessionid AS "id",
+					a.login_name AS "loginName",
+					a.dept_name AS "deptName",
+					a.ipaddr AS "ipaddr",
+					a.login_location AS "loginLocation",
+					a.browser AS "browser",
+					a.os AS "os",
+					a.status AS "status",
+					a.start_timestsamp AS "startTimestsamp",
+					a.last_access_time AS "lastAccessTime",
+					a.expire_time AS "expireTime",
+					a.create_by AS "createBy.id",
+					a.create_date AS "createDate",
+					a.update_by AS "updateBy.id",
+					a.update_date AS "updateDate",
+					a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="sysUserOnlineJoins">
+	</sql>
+    
+	<select id="get" resultType="SysUserOnline">
+		SELECT 
+			<include refid="sysUserOnlineColumns"/>
+		FROM sys_user_online a
+		<include refid="sysUserOnlineJoins"/>
+		WHERE a.sessionid = #{id}
+	</select>
+	
+	<select id="findList" resultType="SysUserOnline">
+		SELECT 
+			<include refid="sysUserOnlineColumnsList"/>
+		FROM sys_user_online a
+		<include refid="sysUserOnlineJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="id != null and id != ''">
+				AND a.sessionid = #{id}
+			</if>
+			<if test="loginName != null and loginName != ''">
+				AND a.login_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{loginName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{loginName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{loginName},'%')</if>
+			</if>
+			<if test="deptName != null and deptName != ''">
+				AND a.dept_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{deptName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{deptName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{deptName},'%')</if>
+			</if>
+			<if test="ipaddr != null and ipaddr != ''">
+				AND a.ipaddr = #{ipaddr}
+			</if>
+			<if test="loginLocation != null and loginLocation != ''">
+				AND a.login_location = #{loginLocation}
+			</if>
+			<if test="browser != null and browser != ''">
+				AND a.browser = #{browser}
+			</if>
+			<if test="os != null and os != ''">
+				AND a.os = #{os}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="beginStartTimestsamp != null and endStartTimestsamp != null ">
+				AND a.start_timestsamp BETWEEN #{beginStartTimestsamp} AND #{endStartTimestsamp}
+			</if>
+			<if test="beginLastAccessTime != null and endLastAccessTime != null ">
+				AND a.last_access_time BETWEEN #{beginLastAccessTime} AND #{endLastAccessTime}
+			</if>
+			<if test="expireTime != null and expireTime != ''">
+				AND a.expire_time = #{expireTime}
+			</if>
+			<if test="createBy != null and createBy.id != null and createBy.id != ''">
+				AND a.create_by = #{createBy.id}
+			</if>
+			<if test="beginCreateDate != null and endCreateDate != null ">
+				AND a.create_date BETWEEN #{beginCreateDate} AND #{endCreateDate}
+			</if>
+			<if test="updateBy != null and updateBy.id != null and updateBy.id != ''">
+				AND a.update_by = #{updateBy.id}
+			</if>
+			<if test="delFlag != null and delFlag != ''">
+				AND a.del_flag = #{delFlag}
+			</if>
+			<if test="where !=null and where != ''">
+				AND ${where}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SysUserOnline">
+		SELECT 
+			<include refid="sysUserOnlineColumnsList"/>
+		FROM sys_user_online a
+		<include refid="sysUserOnlineJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sys_user_online(
+			sessionid,
+			login_name,
+			dept_name,
+			ipaddr,
+			login_location,
+			browser,
+			os,
+			status,
+			start_timestsamp,
+			last_access_time,
+			expire_time,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag
+		) VALUES (
+			#{id},
+			#{loginName},
+			#{deptName},
+			#{ipaddr},
+			#{loginLocation},
+			#{browser},
+			#{os},
+			#{status},
+			#{startTimestsamp},
+			#{lastAccessTime},
+			#{expireTime},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_user_online SET 	
+			sessionid = #{id},
+			login_name = #{loginName},
+			dept_name = #{deptName},
+			ipaddr = #{ipaddr},
+			login_location = #{loginLocation},
+			browser = #{browser},
+			os = #{os},
+			status = #{status},
+			start_timestsamp = #{startTimestsamp},
+			last_access_time = #{lastAccessTime},
+			expire_time = #{expireTime},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate}
+		WHERE sessionid = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM sys_user_online
+		WHERE sessionid = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE sys_user_online SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE sessionid = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="SysUserOnline" statementType="STATEMENT">
+		select * FROM sys_user_online  where ${propertyName} = '${value}'
+	</select>
+
+	<select id="total" resultType="SysUserOnline">
+		SELECT
+			<choose>
+				<when test=" totalType != null and totalType != ''">
+					DATE_FORMAT(a.create_date,'${totalType}') as totalDate,
+				</when>
+				<otherwise>
+				 </otherwise>
+			</choose>
+			count(*) as totalCount
+		FROM
+			sys_user_online a
+		<where>
+			1=1
+			and a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="id != null and id != ''">
+				AND a.sessionid = #{id}
+			</if>
+			<if test="loginName != null and loginName != ''">
+				AND a.login_name LIKE
+					<if test="dbName == 'oracle'">'%'||#{loginName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{loginName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{loginName},'%')</if>
+			</if>
+			<if test="deptName != null and deptName != ''">
+				AND a.dept_name LIKE
+					<if test="dbName == 'oracle'">'%'||#{deptName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{deptName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{deptName},'%')</if>
+			</if>
+			<if test="ipaddr != null and ipaddr != ''">
+				AND a.ipaddr = #{ipaddr}
+			</if>
+			<if test="loginLocation != null and loginLocation != ''">
+				AND a.login_location = #{loginLocation}
+			</if>
+			<if test="browser != null and browser != ''">
+				AND a.browser = #{browser}
+			</if>
+			<if test="os != null and os != ''">
+				AND a.os = #{os}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="beginStartTimestsamp != null and endStartTimestsamp != null ">
+				AND a.start_timestsamp BETWEEN #{beginStartTimestsamp} AND #{endStartTimestsamp}
+			</if>
+			<if test="beginLastAccessTime != null and endLastAccessTime != null ">
+				AND a.last_access_time BETWEEN #{beginLastAccessTime} AND #{endLastAccessTime}
+			</if>
+			<if test="expireTime != null and expireTime != ''">
+				AND a.expire_time = #{expireTime}
+			</if>
+			<if test="createBy != null and createBy.id != null and createBy.id != ''">
+				AND a.create_by = #{createBy.id}
+			</if>
+			<if test="beginCreateDate != null and endCreateDate != null ">
+				AND a.create_date BETWEEN #{beginCreateDate} AND #{endCreateDate}
+			</if>
+			<if test="updateBy != null and updateBy.id != null and updateBy.id != ''">
+				AND a.update_by = #{updateBy.id}
+			</if>
+			<if test="delFlag != null and delFlag != ''">
+				AND a.del_flag = #{delFlag}
+			</if>
+		</where>
+		<choose>
+			<when test=" groupBy != null and groupBy != '' and totalType != null and totalType != '' ">
+				GROUP BY DATE_FORMAT(a.create_date,'${totalType}'),${groupBy}
+			</when>
+			<when test=" groupBy != null and groupBy != ''">
+				GROUP BY ${groupBy}
+			</when>
+			<when test=" totalType != null and totalType != ''">
+				GROUP BY DATE_FORMAT(a.create_date,'${totalType}')
+			</when>
+			<otherwise>
+			 </otherwise>
+		</choose>
+		<choose>
+			<when test=" orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+</mapper>

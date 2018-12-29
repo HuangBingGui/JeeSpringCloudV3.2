@@ -250,9 +250,13 @@ JeeSpringV3.0.0-2018-10-12
 <table><tbody>
 <tr>
 <td><img alt="微服务" class="md_relative_url" src="./document/1000StarProject.jpg"></td>
+<td><img alt="微服务" class="md_relative_url" src="./document/GVPProject.jpg"></td>
+</tr>
+<tr>
 <td>
-JeeSpringCloud	1k+Star项目<br>
-JeeSpringCloud	2018年度最受欢迎中国开源软件项目<br>
+JeeSpringCloud	2018年度最受欢迎中国开源软件项目
+</td>
+<td>
 </td>
 </tr>
 </tbody></table>

@@ -5,7 +5,7 @@ JeeSpringCloud	GVP项目、1k+Star项目<br>
 JeeSpringCloud	2018年度最受欢迎中国开源软件项目<br>
 
 码云JeeSpringCloud:https://gitee.com/JeeHuangBingGui/jeeSpringCloud<br>
-演示版地址：http://yocity.imwork.net:10858/admin/login<br>
+演示版地址：http://bknfdnl.hn3.mofasuidao.cn/admin/login<br>
 
 单项目版本：https://gitee.com/JeeHuangBingGui/JeeSpringCloudV3.0<br>
 文档视频下载：https://gitee.com/JeeHuangBingGui/jeeSpringCloud/attach_files<br>
